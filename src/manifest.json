@@ -1,0 +1,10 @@
+{
+  "name": "Its Your Boi",
+  "description": "A Focus Buddy to help you lock in.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "icon.svg"
+  }
+}
