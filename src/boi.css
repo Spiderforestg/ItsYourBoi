@@ -1,0 +1,32 @@
+html {
+    width:350px;
+    height:500px;
+}
+
+header {
+    text-align: center;
+    width:100%;
+}
+
+#main {
+    background-color: cadetblue;
+    height:400px;
+}
+
+footer {
+    background-color: dimgray;
+    display:grid;
+    grid-template-rows: 2;
+    grid-template-columns: 2;
+
+    #logo {
+        width:50px;
+        height:50px;
+        grid-row: 1/2;
+        grid-column: 1;
+    }
+    #credits {
+        grid-row:1/2;
+        grid-column:2;
+    }
+}
