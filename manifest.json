@@ -6,5 +6,8 @@
   "action": {
     "default_popup": "src/index.html",
     "default_icon": "src/assets/icon.svg"
+  },
+  "icons": {
+    "48": "src/assets/icon.svg"
   }
 }
