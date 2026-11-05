@@ -1,8 +1,13 @@
 {
   "name": "Its Your Boi",
   "description": "A Focus Buddy to help you lock in.",
-  "version": "1.1",
+  "version": "1.2",
   "manifest_version": 3,
+  "permissions": ["storage", "alarms", "notifications"],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
   "action": {
     "default_popup": "src/index.html",
     "default_icon": "src/assets/icon.svg"

@@ -1,15 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Pomodoro · It's Your Boi</title>
+		<link rel="stylesheet" href="pomodoro.css">
+		<script type="module" src="pomodoro.js"></script>
+	</head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro</title>
-</head>
+	<body>
+		<main class="app">
+			<header class="topbar">
+				<a class="brand" href="index.html">
+					<span class="brand-icon">b.</span>
+					it's your boi
+					<span class="brand-dot">✳</span>
+				</a>
+				<button
+					id="settings-toggle"
+					class="icon-button"
+					aria-label="Timer settings"
+					aria-expanded="false"
+					aria-controls="settings"
+				>⚙</button>
+			</header>
 
-<body>
-    <h1>Pomodoro Timer</h1>
+			<div class="intro">
+				<span class="eyebrow">A LITTLE FOCUS GOES A LONG WAY</span>
+				<h1>One thing at a time.</h1>
+				<p>Your next good session starts here.</p>
+			</div>
 
-</body>
+			<section class="timer-card" aria-label="Pomodoro timer">
+				<div class="modes" role="group" aria-label="Session type">
+					<button data-mode="focus" aria-pressed="true">Focus</button>
+					<button data-mode="short" aria-pressed="false">Short break</button>
+					<button data-mode="long" aria-pressed="false">Long break</button>
+				</div>
 
+				<div class="dial" id="dial">
+					<div class="dial-inner">
+						<span id="phase" class="eyebrow">TIME TO LOCK IN</span>
+						<div id="time" role="timer" aria-label="Time remaining">25:00</div>
+						<span id="timer-hint">Small steps. Big things.</span>
+					</div>
+				</div>
+
+				<div class="controls">
+					<button id="reset" class="icon-button" aria-label="Reset current session">↺</button>
+					<button id="start" class="primary">
+						Start focusing <span>▶</span>
+					</button>
+					<button id="skip" class="icon-button" aria-label="Skip to next session">⇥</button>
+				</div>
+
+				<div id="cycle" class="cycle" aria-label="Focus sessions in this cycle"></div>
+				<p id="next" class="next">A short break follows your focus session.</p>
+			</section>
+
+			<section id="settings" class="panel" hidden>
+				<h2>Find your rhythm</h2>
+				<p>Changing lengths resets the current timer.</p>
+
+				<form id="settings-form">
+					<div class="settings-grid">
+						<label>
+							Focus
+							<input name="focus" type="number" min="1" max="120" step="1" required>
+						</label>
+						<label>
+							Short break
+							<input name="short" type="number" min="1" max="120" step="1" required>
+						</label>
+						<label>
+							Long break
+							<input name="long" type="number" min="1" max="120" step="1" required>
+						</label>
+					</div>
+
+					<div class="settings-footer">
+						<span>Minutes · 1–120</span>
+						<button class="small-button">Save lengths</button>
+					</div>
+				</form>
+			</section>
+
+			<section class="stats" aria-label="Your progress">
+				<div>
+					<strong id="completed">0</strong>
+					<span>sessions finished</span>
+				</div>
+				<span class="divider"></span>
+				<div>
+					<strong id="minutes">0<span> min</span></strong>
+					<span>time well spent</span>
+				</div>
+			</section>
+
+			<section class="tasks">
+				<div class="section-heading">
+					<h2>A little game plan</h2>
+					<span id="task-count">0/0 done</span>
+				</div>
+
+				<form id="task-form">
+					<input
+						id="task-title"
+						maxlength="120"
+						placeholder="What are you working on?"
+						aria-label="New task"
+						required
+						autocomplete="off"
+					>
+					<button aria-label="Add task">+</button>
+				</form>
+
+				<ul id="task-list"></ul>
+				<p id="empty-tasks">Clear your head. Give one task your attention.</p>
+			</section>
+
+			<footer>
+				<span class="status-dot"></span>
+				<span id="environment">Your progress stays on this device.</span>
+				<button id="open-tab" class="text-button">Open in tab ↗</button>
+			</footer>
+
+			<p id="message" role="status" aria-live="polite"></p>
+		</main>
+	</body>
 </html>
