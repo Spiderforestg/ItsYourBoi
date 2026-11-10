@@ -94,7 +94,7 @@ $('#open-tab').addEventListener('click', () => {
   else window.open('pomodoro.html', '_blank', 'noopener');
 });
 if (extension) chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'local' && changes[KEY]?.newValue) { state = changes[KEY].newValue; render(); }
+  if (area === 'sync' && changes[KEY]?.newValue) { state = changes[KEY].newValue; render(); }
 });
 else {
   $('#environment').textContent = 'Web preview · keep this tab open for alerts.';
