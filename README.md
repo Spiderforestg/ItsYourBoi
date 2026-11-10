@@ -11,7 +11,7 @@ focus sessions. Each next session waits for you to press Start.
 - Adjust each length from 1 to 120 whole minutes in Settings. Saving resets the current timer.
 - Track finished focus sessions and focused minutes, and keep a small task list.
 - The timer continues when the popup closes. A browser notification announces completion.
-- Progress is saved locally on your device; it is not shared with other users.
+- Timer state syncs across devices signed into the same Chrome account or the same Firefox account. Chrome and Firefox do not sync with each other.
 - Skipped and reset sessions do not earn progress. Statistics are lifetime totals.
 
 ### Try it locally
@@ -23,6 +23,7 @@ focus sessions. Each next session waits for you to press Start.
 5. After pulling changes, click **Reload** on the extension card.
 
 The extension needs only `storage`, `alarms`, and `notifications` permissions.
+Timer state is stored in the browser's synced extension storage; existing local timer data is copied there the first time the updated extension runs.
 No host permissions, accounts, or build step are required. Browser/OS notification
 settings may suppress alerts. Alarms can arrive late during sleep or browser shutdown;
 on return the expired session completes once and the next session waits to start.

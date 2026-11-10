@@ -8,8 +8,7 @@
   "background": {
     "service_worker": "src/background.js",
     "type": "module",
-    "scripts": ["src/background.js"],
-    "preferred_environment": ["service_worker"]
+    "scripts": ["src/background.js"]
   },
   "action": {
     "default_popup": "src/index.html",
@@ -17,5 +16,10 @@
   },
   "icons": {
     "48": "src/assets/icon.svg"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@its-your-boi"
+    }
   }
 }

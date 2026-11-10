@@ -7,11 +7,17 @@ function enqueue(work) {
   queue = result.catch(console.error);
   return result;
 }
+async function loadState() {
+  const synced = await chrome.storage.sync.get(KEY);
+  if (synced[KEY]) return synced[KEY];
+
+  const local = await chrome.storage.local.get(KEY);
+  return local[KEY] || initialState();
+}
 async function update(action) {
-  const saved = await chrome.storage.local.get(KEY);
-  const expired = settle(saved[KEY] || initialState());
+  const expired = settle(await loadState());
   const state = action ? transition(expired.state, action) : expired.state;
-  await chrome.storage.local.set({ [KEY]: state });
+  await chrome.storage.sync.set({ [KEY]: state });
   await chrome.alarms.clear(ALARM);
   if (state.endAt !== null) await chrome.alarms.create(ALARM, { when: state.endAt });
   await chrome.action.setBadgeText({ text: state.endAt !== null ? (state.mode === 'focus' ? 'ON' : 'REST') : '' });
@@ -34,6 +40,9 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
 });
 chrome.alarms.onAlarm.addListener(alarm => {
   if (alarm.name === ALARM) enqueue(() => update());
+});
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && changes[KEY]?.newValue) enqueue(() => update());
 });
 chrome.runtime.onStartup.addListener(() => enqueue(() => update()));
 chrome.runtime.onInstalled.addListener(() => enqueue(() => update()));
