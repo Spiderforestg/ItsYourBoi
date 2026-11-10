@@ -4,9 +4,12 @@
   "version": "1.2",
   "manifest_version": 3,
   "permissions": ["storage", "alarms", "notifications"],
+
   "background": {
     "service_worker": "src/background.js",
-    "type": "module"
+    "type": "module",
+    "scripts": ["src/background.js"],
+    "preferred_environment": ["service_worker"]
   },
   "action": {
     "default_popup": "src/index.html",
