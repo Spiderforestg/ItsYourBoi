@@ -1,4 +1,4 @@
-import { KEY, MODES, initialState, settle, transition } from 'timer.mjs';
+import { KEY, MODES, initialState, settle, transition } from '../pomodoro/timer.mjs';
 
 const ALARM = 'boi-session-end';
 let queue = Promise.resolve();

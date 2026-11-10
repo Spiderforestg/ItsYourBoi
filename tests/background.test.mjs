@@ -22,7 +22,7 @@ test('worker restores an expired session once, persists actions, and serializes 
     notifications: { async create(id, options) { notifications.push(options); } },
     runtime: { id: 'test', onMessage: event('message'), onStartup: event('startup'), onInstalled: event('installed') }
   };
-  await import('../src/features/pomodoro/background.js');
+  await import('../src/features/main/background.js');
   const send = action => new Promise(resolve => listeners.message({ target: 'pomodoro', action }, { id: 'test' }, resolve));
   let result = await send();
   assert.equal(result.state.completed, 1);

@@ -6,9 +6,9 @@
   "permissions": ["storage", "alarms", "notifications"],
 
   "background": {
-    "service_worker": "src/background.js",
+    "service_worker": "src/features/main/background.js",
     "type": "module",
-    "scripts": ["src/background.js"]
+    "scripts": ["src/features/main/background.js"]
   },
   "action": {
     "default_popup": "index.html",
