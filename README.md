@@ -43,3 +43,13 @@ after a minute. Check that exactly one focus session is credited, the short brea
 is ready but paused, and a completion notification appears if notifications are allowed.
 Also check pause/resume, resetting, all session modes, task persistence, and a long
 break after four focus sessions.
+
+## Helpful Resources
+
+### JavaScript
+
+[Importing classes from external JavaScript files](https://bobbyhadz.com/blog/javascript-import-class-from-another-file#import-a-class-from-another-file-using-javascript)
+
+[Creating an HTML element using JavaScript](https://www.w3schools.com/jsref/met_document_createelement.asp)
+
+[Adding an HTML class to an HTML element with JavaScript](https://www.w3schools.com/howto/howto_js_add_class.asp)
