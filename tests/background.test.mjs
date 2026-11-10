@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { KEY, initialState } from '../src/timer.mjs';
+import { KEY, initialState } from '../src/features/pomodoro/timer.mjs';
 
 test('worker restores an expired session once, persists actions, and serializes messages', async () => {
   const listeners = {};

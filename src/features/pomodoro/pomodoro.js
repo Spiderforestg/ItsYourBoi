@@ -1,4 +1,4 @@
-import { KEY, MODES, initialState, secondsLeft, settle, transition } from './timer.mjs';
+import { KEY, MODES, initialState, secondsLeft, settle, transition } from '../../timer.mjs';
 
 const $ = selector => document.querySelector(selector);
 const extension = Boolean(globalThis.chrome?.runtime?.id);

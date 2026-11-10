@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { initialState, secondsLeft, settle, transition } from '../src/timer.mjs';
+import { initialState, secondsLeft, settle, transition } from '../src/features/pomodoro/timer.mjs';
 
 test('pause and resume preserve remaining time using a deadline', () => {
   let s = transition(initialState(), { type: 'start' }, 1000);
