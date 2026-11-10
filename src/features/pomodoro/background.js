@@ -1,4 +1,4 @@
-import { KEY, MODES, initialState, settle, transition } from './timer.mjs';
+import { KEY, MODES, initialState, settle, transition } from 'timer.mjs';
 
 const ALARM = 'boi-session-end';
 let queue = Promise.resolve();
@@ -25,7 +25,7 @@ async function update(action) {
   if (expired.finished) {
     try {
       await chrome.notifications.create('boi-session-complete', {
-        type: 'basic', iconUrl: 'src/assets/timer-icon.png',
+        type: 'basic', iconUrl: 'src/assets/pomodoro/timer-icon.png',
         title: `${MODES[expired.finished]} complete!`,
         message: `${MODES[expired.state.mode]} is ready. Open your timer when you’re ready to start.`
       });
