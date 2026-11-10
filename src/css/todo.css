@@ -1,0 +1,24 @@
+#todo-table {
+    display: grid;
+    justify-content: center;
+
+    .todo-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin: 10px;
+
+        .todo-header {
+            font-weight: bold;
+        }
+
+        .todo-name {
+            text-align: left;
+            grid-column: 1 / 2;
+        }
+
+        .todo-type {
+            text-align: right;
+            grid-column: 2 / 3;
+        }
+    }
+}
