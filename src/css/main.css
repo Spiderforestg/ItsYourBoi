@@ -1,11 +1,18 @@
 html {
     width:350px;
     height:500px;
+    box-sizing: border-box;
 }
 
 header {
     text-align: center;
     width:100%;
+}
+
+body {
+    height:400px;
+    width: 350px;
+    margin: 0;
 }
 
 #main {

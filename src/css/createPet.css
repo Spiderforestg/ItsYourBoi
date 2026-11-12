@@ -1,0 +1,16 @@
+html {
+    width:350px;
+    height:500px;
+    border: 3px solid black;
+    box-sizing: border-box;
+}
+
+body {
+    height:400px;
+    width: 350px;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+}
