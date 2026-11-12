@@ -54,3 +54,5 @@ break after four focus sessions.
 [Creating an HTML element using JavaScript](https://www.w3schools.com/jsref/met_document_createelement.asp)
 
 [Adding an HTML class to an HTML element with JavaScript](https://www.w3schools.com/howto/howto_js_add_class.asp)
+
+[Retrieve values from all types of HTML inputs in JavaScript](https://dev.to/milliemolotov/how-to-retrieve-values-from-all-types-of-html-inputs-in-javascript-3143)
