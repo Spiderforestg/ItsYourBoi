@@ -1,26 +1,20 @@
 const form = document.getElementById('nameForm');
 const nameInput = document.getElementById('petName');
 const greeting = document.getElementById('greeting');
+const indexUrl = chrome.runtime.getURL('index.html');
 
 async function loadSavedName() {
     try {
-        const { petName } = await chrome.storage.sync.get('petName');
+        const syncedStorage = await chrome.storage.sync.get(null);
+        const { petName } = syncedStorage;
+
         if (petName) {
-            nameInput.value = petName;
-            greeting.textContent = `Welcome back, ${petName}!`;
+            window.location.href = indexUrl;
             return;
         }
-
-        const legacyName = localStorage.getItem('petName');
-        if (legacyName) {
-            await chrome.storage.sync.set({ petName: legacyName });
-            localStorage.removeItem('petName');
-            nameInput.value = legacyName;
-            greeting.textContent = `Welcome back, ${legacyName}!`;
-        }
     } catch (error) {
-        console.error('Could not load the saved pet name:', error);
-        greeting.textContent = 'Could not load your pet name. Check that extension sync storage is available and try again.';
+        console.error('Could not load sync storage:', error);
+        greeting.textContent = 'Could not load your pet data. Check that extension sync storage is available and try again.';
     }
 }
 
@@ -37,8 +31,7 @@ form.addEventListener('submit', async function(event) {
     nameInput.setCustomValidity('');
     try {
         await chrome.storage.sync.set({ petName: enteredName });
-        localStorage.removeItem('petName');
-        greeting.textContent = `Saved! Hello, ${enteredName}.`;
+        window.location.href = indexUrl;
     } catch (error) {
         console.error('Could not save the pet name to sync storage:', error);
         greeting.textContent = 'Could not save your pet name. Check your connection and try again.';

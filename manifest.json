@@ -11,7 +11,7 @@
     "scripts": ["src/features/main/background.js"]
   },
   "action": {
-    "default_popup": "index.html",
+    "default_popup": "src/features/main/createPet/createPet.html",
     "default_icon": "src/assets/icon.svg"
   },
   "icons": {
