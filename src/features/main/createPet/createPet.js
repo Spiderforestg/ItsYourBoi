@@ -1,7 +1,7 @@
 const form = document.getElementById('nameForm');
 const nameInput = document.getElementById('petName');
 const greeting = document.getElementById('greeting');
-const indexUrl = chrome.runtime.getURL('index.html');
+const petHomeUrl = chrome.runtime.getURL('src/features/pet-home/pet-home.html');
 
 async function loadSavedName() {
     try {
@@ -9,7 +9,7 @@ async function loadSavedName() {
         const { petName } = syncedStorage;
 
         if (petName) {
-            window.location.href = indexUrl;
+            window.location.href = petHomeUrl;
             return;
         }
     } catch (error) {
@@ -31,7 +31,7 @@ form.addEventListener('submit', async function(event) {
     nameInput.setCustomValidity('');
     try {
         await chrome.storage.sync.set({ petName: enteredName });
-        window.location.href = indexUrl;
+        window.location.href = petHomeUrl;
     } catch (error) {
         console.error('Could not save the pet name to sync storage:', error);
         greeting.textContent = 'Could not save your pet name. Check your connection and try again.';
