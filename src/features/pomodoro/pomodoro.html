@@ -10,12 +10,6 @@
 
 	<body>
 		<main class="app">
-			<header class="topbar">
-				<a class="brand" href="../../../index.html">
-					<span class="brand-icon">b.</span>
-					it's your boi
-					<span class="brand-dot">✳</span>
-				</a>
 				<button
 					id="settings-toggle"
 					class="icon-button"
@@ -23,13 +17,6 @@
 					aria-expanded="false"
 					aria-controls="settings"
 				>⚙</button>
-			</header>
-
-			<div class="intro">
-				<span class="eyebrow">A LITTLE FOCUS GOES A LONG WAY</span>
-				<h1>One thing at a time.</h1>
-				<p>Your next good session starts here.</p>
-			</div>
 
 			<section class="timer-card" aria-label="Pomodoro timer">
 				<div class="modes" role="group" aria-label="Session type">
@@ -40,9 +27,7 @@
 
 				<div class="dial" id="dial">
 					<div class="dial-inner">
-						<span id="phase" class="eyebrow">TIME TO LOCK IN</span>
 						<div id="time" role="timer" aria-label="Time remaining">25:00</div>
-						<span id="timer-hint">Small steps. Big things.</span>
 					</div>
 				</div>
 
@@ -79,22 +64,9 @@
 					</div>
 
 					<div class="settings-footer">
-						<span>Minutes · 1–120</span>
 						<button class="small-button">Save lengths</button>
 					</div>
 				</form>
-			</section>
-
-			<section class="stats" aria-label="Your progress">
-				<div>
-					<strong id="completed">0</strong>
-					<span>sessions finished</span>
-				</div>
-				<span class="divider"></span>
-				<div>
-					<strong id="minutes">0<span> min</span></strong>
-					<span>time well spent</span>
-				</div>
 			</section>
 
 			<section class="tasks">
