@@ -3,12 +3,6 @@ export class todoItem {
     constructor(name, type) {
         this.name=name;
         this.type=type;
-<<<<<<< HEAD
-    }
-
-    displayType() {
-        console.log(this.type);
-=======
 
         this.completed = false;
     }
@@ -17,6 +11,5 @@ export class todoItem {
         if (this.completed == false)
             this.completed = true;
         else this.completed = false;
->>>>>>> 17-to-do-lists
     }
 }
