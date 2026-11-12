@@ -1,0 +1,37 @@
+.arcade-room { height: 367px; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: #e0e7cf; }
+.arcade-heading p { margin: 4px 0 0; font-size: 16px; line-height: 1.4; }
+.game-picker { display: flex; flex-direction: column; gap: 10px; height: 100%; min-height: 0; }
+.arcade-heading h1 { margin: 4px 0 0; font-size: 32px; letter-spacing: 1px; }
+.game-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 72px; gap: 8px; overflow-y: auto; min-height: 76px; flex: 1; padding: 0 3px 3px 0; align-content: start; }
+.game-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 0; padding: 7px; border: 2px solid var(--ink); border-radius: 0; background: #f9f5e7; color: inherit; font-family: inherit; cursor: pointer; box-shadow: 2px 2px 0 #b7ba9e; }
+.game-card:hover { background: #f2e4b9; }
+.game-card[aria-pressed="true"] { background: #d7e6c7; box-shadow: inset 0 0 0 2px #7b9769; }
+.game-card:focus-visible { outline: 3px solid #287b88; outline-offset: -3px; }
+.game-symbol { font-size: 16px; line-height: 1; font-weight: bold; }
+.game-name { font-size: 16px; font-weight: bold; }
+.game-card-status { font-size: 16px; color: #686c58; }
+.game-preview { padding: 10px; border: 2px solid var(--ink); background: #f9f5e7; flex-shrink: 0; }
+.game-preview-heading { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.game-preview h2 { margin: 0; font-size: 16px; }
+.game-status { padding: 3px 4px; background: #e8e2cd; font-size: 16px; }
+.game-description { margin: 7px 0; font-size: 16px; line-height: 1.4; }
+.game-availability { margin: 0; font-size: 16px; line-height: 1.4; color: #686c58; }
+.arcade-room [hidden] { display: none; }
+.play-game, .snake-panel button, .brick-panel button { border: 2px solid var(--ink); border-radius: 0; padding: 5px 8px; background: #f9f5e7; color: inherit; font: normal 16px "m5x7", monospace; cursor: pointer; }
+.play-game { margin-top: 7px; background: #d7e6c7; }
+.snake-panel button:hover, .brick-panel button:hover, .play-game:hover { background: #f2e4b9; }
+.snake-panel button:disabled, .brick-panel button:disabled { opacity: 0.5; cursor: default; }
+.snake-panel :focus-visible, .brick-panel :focus-visible, .play-game:focus-visible { outline: 3px solid #287b88; outline-offset: 1px; }
+.snake-panel { display: flex; flex-direction: column; align-items: center; gap: 7px; min-height: 0; }
+.snake-heading { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
+.snake-heading h2 { margin: 0; font-size: 16px; }
+.snake-heading span { font-size: 16px; white-space: nowrap; }
+.snake-board { width: 196px; height: 196px; border: 2px solid var(--ink); image-rendering: pixelated; background: #edf1d9; flex-shrink: 0; }
+.snake-message { margin: 0; min-height: 16px; font-size: 16px; line-height: 1; text-align: center; }
+.snake-actions { display: flex; gap: 8px; }
+.brick-panel { display: flex; flex-direction: column; align-items: center; gap: 5px; min-height: 0; }
+.brick-heading, .brick-stats { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
+.brick-heading h2 { margin: 0; font-size: 16px; }
+.brick-stats { width: 228px; font-size: 16px; }
+.brick-board { width: 228px; height: 213px; border: 2px solid var(--ink); image-rendering: pixelated; flex-shrink: 0; }
+.brick-message { margin: 0; min-height: 16px; font-size: 16px; line-height: 1; text-align: center; }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Boi — Pet Home</title>
+  <link rel="stylesheet" href="pet-home.css">
+  <script type="module" src="pet-home.js"></script>
+</head>
+<body>
+  <main class="home">
+    <section class="pet-room" aria-label="Your pet's home">
+      <section class="pet-progress" aria-label="Pet level and experience">
+        <div class="xp-heading"><span class="pet-identity"><span class="pet-name">Boi</span><span class="pet-level">Lv. —</span></span><span class="xp-count">— / 100 XP</span></div>
+        <progress class="xp-bar" max="100" value="0" aria-label="XP toward next level"></progress>
+        <p class="xp-detail">Completed focus: 1 min = 1 XP</p>
+        <div class="wallet-clock-row">
+          <span class="pet-wallet" aria-label="Coins: 0"><span class="coin-icon" aria-hidden="true"></span><span class="coin-count">0</span></span>
+          <time class="room-clock" aria-label="Local date and time"></time>
+        </div>
+      </section>
+      <div class="pet-stage">
+        <div class="prototype-controls">
+          <button class="prototype-xp" type="button" title="Prototype: add 50 test XP (saved separately from focus time)">+50 XP<span>TEST</span></button>
+          <button class="prototype-xp prototype-reset" type="button" title="Reset pet to level 1 and 0 XP. Focus time is preserved.">RESET<span>LEVEL</span></button>
+        </div>
+        <div class="window" aria-hidden="true">
+          <span class="celestial"></span><span class="stars"></span>
+          <span class="cloud"></span><span class="landscape"></span>
+        </div>
+        <button class="dresser" type="button" aria-label="Open pet color palette" aria-haspopup="dialog" aria-controls="color-palette" title="Change Boi's color"><span class="dresser-mirror" aria-hidden="true"></span><span class="dresser-drawers" aria-hidden="true"></span></button>
+        <div class="floor" aria-hidden="true"></div>
+        <div class="rug" aria-hidden="true"></div>
+        <div class="pet-shadow" aria-hidden="true"></div>
+        <button class="pet-interact" type="button" aria-label="Play with Boi" title="Click to play with Boi">
+          <canvas class="pet" width="22" height="25" aria-hidden="true"></canvas>
+        </button>
+      </div>
+    </section>
+
+    <nav class="menus" aria-label="Main navigation">
+      <a href="pet-home.html" aria-current="page"><span class="menu-icon home-icon" aria-hidden="true"></span><span>HOME</span></a>
+      <a href="../../pomodoro.html"><span class="menu-icon clock-icon" aria-hidden="true"></span><span>FOCUS</span></a>
+      <a href="../../todo.html"><span class="menu-icon task-icon" aria-hidden="true"></span><span>TASKS</span></a>
+      <button type="button" disabled aria-label="Feed (coming soon)" title="ごはん：準備中"><span class="menu-icon food-icon" aria-hidden="true"></span><span>FEED</span></button>
+      <button type="button" disabled aria-label="Dress up (coming soon)" title="着せ替え：準備中"><span class="menu-icon dress-icon" aria-hidden="true"></span><span>DRESS</span></button>
+      <a href="../fun-things/fun-things.html"><span class="menu-icon fun-icon" aria-hidden="true"></span><span class="fun-label">FUN<br>THINGS</span></a>
+      <a href="../../index.html"><span class="menu-icon start-icon" aria-hidden="true">←</span><span>START</span></a>
+    </nav>
+  </main>
+  <dialog class="color-palette" id="color-palette" aria-labelledby="palette-title">
+    <div class="palette-heading"><h2 id="palette-title">BOI'S COLORS</h2><button class="palette-close" type="button" aria-label="Close color palette">×</button></div>
+    <section class="palette-section" aria-labelledby="primary-color-title">
+      <h3 id="primary-color-title">Primary color</h3>
+      <p>Original light blue area</p>
+      <div class="color-swatches" data-region="primary" role="group" aria-label="Primary color"></div>
+    </section>
+    <section class="palette-section" aria-labelledby="secondary-color-title">
+      <h3 id="secondary-color-title">Secondary color</h3>
+      <p>Original yellow area</p>
+      <div class="color-swatches" data-region="secondary" role="group" aria-label="Secondary color"></div>
+    </section>
+    <p class="palette-status" role="status">Pick a color to try it on.</p>
+  </dialog>
+</body>
+</html>

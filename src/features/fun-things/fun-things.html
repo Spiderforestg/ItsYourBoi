@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Boi — Fun Things</title>
+  <link rel="stylesheet" href="../pet-home/pet-home.css">
+  <link rel="stylesheet" href="fun-things.css">
+  <script type="module" src="fun-things.js"></script>
+</head>
+<body>
+  <main class="home">
+    <section class="pet-room arcade-room" aria-labelledby="arcade-title">
+      <div class="game-picker">
+      <header class="arcade-heading">
+        <h1 id="arcade-title">FUN THINGS</h1>
+        <p>Pick a mini game for your next break.</p>
+      </header>
+      <div class="game-list" role="group" aria-label="Choose a mini game"></div>
+      <section class="game-preview" aria-labelledby="game-title" aria-live="polite">
+        <div class="game-preview-heading"><h2 id="game-title">Choose a game</h2><span class="game-status">PLANNED</span></div>
+        <p class="game-description">Select a card to see more.</p>
+        <p class="game-availability">Games are coming soon. These are preview ideas.</p>
+        <button class="play-game" type="button" hidden>PLAY SNAKE</button>
+      </section>
+      </div>
+      <section class="snake-panel" aria-label="Snake game" hidden>
+        <header class="snake-heading"><button class="snake-back game-back" type="button">← GAMES</button><h2>SNAKE</h2><span>Score: <b class="snake-score">0</b></span></header>
+        <canvas class="snake-board" width="192" height="192" tabindex="0" aria-label="Snake board. Use arrow keys or W A S D to move. Space pauses the game."></canvas>
+        <p class="snake-message" role="status">Eat snacks. Avoid walls and yourself!</p>
+        <div class="snake-actions"><button class="snake-start" type="button">START</button><button class="snake-pause" type="button" disabled>PAUSE</button></div>
+      </section>
+      <section class="brick-panel" aria-label="Brick Breaker game" hidden>
+        <header class="brick-heading"><button class="game-back" type="button">← GAMES</button><h2>BRICK BREAKER</h2></header>
+        <div class="brick-stats"><span>Score: <b class="brick-score">0</b></span><span>Lives: <b class="brick-lives">3</b></span></div>
+        <canvas class="brick-board" width="240" height="224" tabindex="0" aria-label="Brick Breaker board. Move with Left and Right or A and D. Space launches or pauses."></canvas>
+        <p class="brick-message" role="status">Left / Right or A / D · Space to launch</p>
+        <div class="snake-actions"><button class="brick-start" type="button">START</button><button class="brick-pause" type="button" disabled>PAUSE</button></div>
+      </section>
+    </section>
+    <nav class="menus" aria-label="Main navigation">
+      <a href="../pet-home/pet-home.html"><span class="menu-icon home-icon" aria-hidden="true"></span><span>HOME</span></a>
+      <a href="../../pomodoro.html"><span class="menu-icon clock-icon" aria-hidden="true"></span><span>FOCUS</span></a>
+      <a href="../../todo.html"><span class="menu-icon task-icon" aria-hidden="true"></span><span>TASKS</span></a>
+      <button type="button" disabled aria-label="Feed (coming soon)" title="ごはん：準備中"><span class="menu-icon food-icon" aria-hidden="true"></span><span>FEED</span></button>
+      <button type="button" disabled aria-label="Dress up (coming soon)" title="着せ替え：準備中"><span class="menu-icon dress-icon" aria-hidden="true"></span><span>DRESS</span></button>
+      <a href="fun-things.html" aria-current="page"><span class="menu-icon fun-icon" aria-hidden="true"></span><span class="fun-label">FUN<br>THINGS</span></a>
+      <a href="../../index.html"><span class="menu-icon start-icon" aria-hidden="true">←</span><span>START</span></a>
+    </nav>
+  </main>
+</body>
+</html>
