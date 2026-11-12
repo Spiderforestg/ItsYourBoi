@@ -3,9 +3,13 @@ export class todoItem {
     constructor(name, type) {
         this.name=name;
         this.type=type;
+
+        this.completed = false;
     }
 
-    displayType() {
-        console.log(this.type);
+    changeCompletionStatus() {
+        if (this.completed == false)
+            this.completed = true;
+        else this.completed = false;
     }
 }

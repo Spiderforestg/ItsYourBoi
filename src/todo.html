@@ -23,6 +23,27 @@
           <td class="todo-header" class="todo-type">Type</td>
         </tr>
       </table>
+
+      <!--Form to add a To-do list item-->
+      <form id="todo-form">
+        <!--Input a -->
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" placeholder="Name">
+        <br>
+      
+        <input id="once" name="type" type="radio" value="Once" checked>
+        <label for="once">Once</label>
+        <input id="daily" name="type" type="radio" value="Daily">
+        <label for="daily">Daily</label>
+        <input id="weekly" name="type" type="radio" value="Weekly">
+        <label for="weekly">Weekly</label>
+        <br>
+
+        <input id="add-item-button" type="button" value="Add item">
+        <br>
+
+        <span id="form-error"></span>
+      </form>
     </section>
   </main>
 
