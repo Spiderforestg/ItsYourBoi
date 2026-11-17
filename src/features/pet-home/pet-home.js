@@ -1,7 +1,7 @@
 import { getRoomScene } from './room-scene.mjs';
 import { PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
 import { createPetMood, PET_LAST_SEEN_KEY, shouldPetSleep } from './pet-mood.mjs';
-import { KEY, initialState, settle } from '../../timer.mjs';
+import { KEY, initialState, settle } from '../pomodoro/timer.mjs';
 import { getPetProgress, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY } from './pet-progress.mjs';
 
 const extension = Boolean(globalThis.chrome?.runtime?.id);
@@ -250,7 +250,10 @@ sprite.addEventListener('load', () => {
   originalFrame = frame;
   applyPetColor(selectedColor);
 });
-sprite.src = new URL('../../assets/pet/placeholder-sprite-sheet.png', import.meta.url).href;
+sprite.addEventListener('error', () => {
+  xpDetail.textContent = "Could not load Boi's image. Update and reload the extension.";
+});
+sprite.src = new URL('../../assets/pets/placeholder-sprite-sheet.png', import.meta.url).href;
 
 function applyPetColor(colorId, secondaryId = selectedSecondaryColor) {
   selectedColor = PET_COLORS.some(color => color.id === colorId) ? colorId : 'blue';
