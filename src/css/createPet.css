@@ -1,16 +1,43 @@
-html {
-    width:350px;
-    height:500px;
-    border: 3px solid black;
-    box-sizing: border-box;
-}
-
-body {
-    height:400px;
-    width: 350px;
-    margin: 0;
-}
-
-h1 {
-    text-align: center;
+/* The shared room, palette, and pixel font come from Pet Home. */
+html { width: 100%; min-width: 280px; min-height: 100%; }
+body { min-width: 280px; }
+.onboarding { width: 350px; max-width: 100%; margin: 0 auto; padding: 18px 14px 14px; }
+.brand { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+.brand-mark { color: #627c4f; font-size: 24px; }
+.brand-note { flex-basis: 100%; padding-left: 24px; color: #686c58; font-size: 16px; font-weight: normal; letter-spacing: 0; }
+.create-card { border: 3px solid var(--ink); background: #f9f5e7; box-shadow: 4px 4px 0 #c5bea8; }
+.welcome-heading { padding: 18px 16px 16px; }
+.eyebrow { margin: 0 0 10px; color: #627c4f; font-size: 16px; letter-spacing: 1px; }
+h1 { margin: 0 0 8px; font-size: 28px; line-height: 1; font-weight: normal; }
+.welcome-heading > p:last-child { margin: 0; color: #686c58; font-size: 18px; line-height: 1.15; }
+.welcome-room { flex: none; height: 170px; border-block: 3px solid var(--ink); }
+.welcome-room .window { left: 22px; top: 17px; width: 70px; height: 65px; }
+.welcome-room .window::before { left: 27px; }
+.welcome-room .window::after { top: 26px; }
+.welcome-room .floor { height: 49px; border-top-width: 5px; }
+.welcome-room .rug { width: 145px; height: 31px; bottom: 8px; }
+.welcome-room .pet-shadow { bottom: 19px; }
+.welcome-pet { position: absolute; left: 50%; margin-left: -44px; bottom: 22px; }
+.hello-bubble { position: absolute; z-index: 1; right: 16px; top: 19px; padding: 7px 9px; border: 2px solid var(--ink); box-shadow: 2px 2px 0 #bdc9af; background: #f9f5e7; font-size: 16px; }
+.hello-bubble::after { content: ""; position: absolute; bottom: -7px; left: 14px; width: 8px; height: 8px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); background: #f9f5e7; transform: rotate(45deg); }
+.name-panel { padding: 16px; }
+.journey-note { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 2px solid #dedfca; }
+.journey-star { color: #8b6c32; font-size: 27px; }
+.journey-note p { margin: 0; font-size: 18px; line-height: 1.2; }
+label { display: block; margin-bottom: 8px; font-size: 20px; }
+input { display: block; width: 100%; min-height: 44px; padding: 9px 10px; border: 2px solid var(--ink); border-radius: 0; box-shadow: inset 2px 2px 0 #e8e2cd; background: #fffdf5; color: inherit; font-size: 22px; line-height: 1; }
+input::placeholder { color: #7b7b68; opacity: 1; }
+.field-hint { margin: 7px 0 16px; color: #686c58; font-size: 16px; line-height: 1.15; }
+.begin-button { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 10px 12px; border: 2px solid var(--ink); border-radius: 0; background: #d7e6c7; box-shadow: 3px 3px 0 #a8ae91; color: #343b36; font-size: 22px; line-height: 1; cursor: pointer; }
+.begin-button:hover { background: #c4d9ae; }
+.begin-button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #a8ae91; }
+.begin-button:disabled { opacity: 0.65; cursor: wait; }
+input:focus-visible, .begin-button:focus-visible { outline: 3px solid #287b88; outline-offset: 3px; }
+#greeting { margin: 12px 0 0; color: #854a37; font-size: 18px; line-height: 1.2; }
+#greeting:empty { display: none; }
+.welcome-footer { margin-top: 16px; color: #686c58; text-align: center; font-size: 16px; letter-spacing: 1px; }
+@media (max-width: 320px) {
+    .onboarding { padding-inline: 10px; }
+    .welcome-heading, .name-panel { padding-inline: 12px; }
+    h1 { font-size: 26px; }
 }

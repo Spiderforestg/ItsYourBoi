@@ -1,0 +1,53 @@
+/* Pet Home provides the font, palette, and navigation icons. */
+html { width: 100%; min-width: 280px; min-height: 100%; }
+body { min-width: 280px; }
+.start-page { width: 350px; max-width: 100%; margin: 0 auto; padding: 18px 14px; }
+.start-brand { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 16px; font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+.start-brand > span:first-child { color: #627c4f; font-size: 24px; }
+.brand-caption { flex-basis: 100%; padding-left: 24px; color: #686c58; font-size: 16px; font-weight: normal; letter-spacing: 0; }
+.welcome-card { overflow: hidden; border: 3px solid var(--ink); background: #f9f5e7; box-shadow: 4px 4px 0 #c5bea8; }
+.welcome-copy { padding: 18px 16px 14px; }
+.eyebrow { margin: 0 0 12px; color: #627c4f; font-size: 16px; letter-spacing: 1px; }
+h1 { margin: 0 0 10px; font-size: 36px; line-height: 0.95; font-weight: normal; }
+.welcome-copy > p:last-child { margin: 0; color: #686c58; font-size: 18px; line-height: 1.2; }
+.welcome-landscape { position: relative; height: 84px; overflow: hidden; isolation: isolate; border-block: 2px solid var(--ink); background: #bdd7d5; }
+.landscape-sun { position: absolute; top: 12px; right: 34px; width: 22px; height: 22px; border: 3px solid #c6a65d; background: #ffe5a1; box-shadow: 3px 3px 0 #a7c5bf; }
+.landscape-cloud { position: absolute; top: 17px; left: 35px; width: 46px; height: 9px; background: #f9f5e7; box-shadow: 10px -7px 0 #f9f5e7, 93px 13px 0 #f9f5e7; }
+.landscape-hills { position: absolute; bottom: 0; left: 0; width: 100%; height: 22px; background: #88a86c; box-shadow: -85px -12px 0 #a8bc8c, 125px -7px 0 #a8bc8c; }
+.landscape-path { position: absolute; bottom: 0; left: 50%; width: 40px; height: 8px; background: #e3c99b; box-shadow: -10px -8px 0 #e3c99b, -20px -16px 0 #e3c99b; }
+.landscape-flower { position: absolute; bottom: 8px; left: 35px; width: 4px; height: 10px; background: #454b3f; box-shadow: 228px -3px 0 #454b3f; }
+.landscape-flower::after { content: ""; position: absolute; top: -3px; left: -3px; width: 10px; height: 5px; background: #f0d69f; box-shadow: 228px -3px 0 #f0d69f; }
+.buddy-card { padding: 14px 16px 16px; }
+.buddy-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.status-dot { flex-shrink: 0; width: 8px; height: 8px; border: 2px solid #627c4f; background: #afd3a2; }
+#petNameDisplay { min-width: 0; margin: 0; overflow-wrap: anywhere; font-size: 18px; line-height: 1.15; }
+.primary-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; min-height: 44px; border: 2px solid var(--ink); background: #d7e6c7; box-shadow: 3px 3px 0 #a8ae91; color: inherit; text-decoration: none; font-size: 22px; }
+.primary-link:hover { background: #c4d9ae; }
+.primary-link:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #a8ae91; }
+.activity-section { margin-top: 23px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; color: #686c58; }
+h2 { margin: 0; font-size: 16px; font-weight: normal; letter-spacing: 0.5px; }
+.activity-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.activity-link { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; min-width: 0; min-height: 116px; padding: 12px 10px; border: 2px solid var(--ink); background: #f9f5e7; box-shadow: 3px 3px 0 #c5bea8; color: inherit; text-decoration: none; }
+.activity-link:hover { background: #f2e4b9; }
+.activity-link .menu-icon { margin-bottom: 3px; }
+.activity-link .home-icon { margin-top: 6px; margin-bottom: 3px; }
+.activity-title { font-size: 22px; }
+.activity-description { color: #686c58; font-size: 16px; line-height: 1.1; }
+.activity-arrow { position: absolute; top: 9px; right: 10px; color: #686c58; font-size: 20px; }
+.start-footer { margin-top: 22px; color: #686c58; font-size: 16px; text-align: center; }
+.start-footer > p { margin: 0 0 10px; letter-spacing: 0.5px; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.footer-links a { color: inherit; text-underline-offset: 3px; }
+.data-settings { margin-top: 16px; padding-top: 12px; border-top: 2px solid #d2ccb6; text-align: left; }
+.data-settings summary { width: fit-content; cursor: pointer; }
+.data-settings p { margin: 10px 0; line-height: 1.2; }
+.data-settings button { padding: 8px 10px; min-height: 36px; border: 2px solid #8c8068; border-radius: 0; background: transparent; color: #754e3d; font-size: 18px; cursor: pointer; }
+.data-settings button:hover { background: #f2e4b9; }
+#resetStatus:empty { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid #287b88; outline-offset: 4px; }
+@media (max-width: 320px) {
+  .start-page { padding-inline: 10px; }
+  .activity-grid { gap: 8px; }
+  .activity-link { padding-inline: 8px; }
+}

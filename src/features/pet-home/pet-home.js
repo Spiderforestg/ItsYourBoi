@@ -1,7 +1,7 @@
 import { getRoomScene } from './room-scene.mjs';
 import { PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
 import { createPetMood, PET_LAST_SEEN_KEY, shouldPetSleep } from './pet-mood.mjs';
-import { KEY, initialState, settle } from '../../timer.mjs';
+import { KEY, initialState, settle } from '../pomodoro/timer.mjs';
 import { getPetProgress, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY } from './pet-progress.mjs';
 
 const extension = Boolean(globalThis.chrome?.runtime?.id);
@@ -12,6 +12,25 @@ const xpDetail = document.querySelector('.xp-detail');
 let progressState;
 let prototypeXP = 0;
 let focusBaseline = 0;
+
+let petName = 'Boi';
+
+const petNameElement = document.querySelector('.pet-name');
+const petButton = document.querySelector('.pet-interact');
+
+async function loadPetName() {
+  try {
+    const saved = await chrome.storage.sync.get('petName');
+    petName = saved.petName || 'Boi';
+    petNameElement.textContent = petName;
+    petButton.setAttribute('aria-label', `Play with ${petName}`);
+    petButton.title = `Click to play with ${petName}`;
+  } catch (error) {
+    console.error('Could not load pet name:', error);
+  }
+}
+
+loadPetName();
 
 function renderProgress(state, bonusXP = prototypeXP, baseline = focusBaseline) {
   progressState = state;
@@ -250,7 +269,10 @@ sprite.addEventListener('load', () => {
   originalFrame = frame;
   applyPetColor(selectedColor);
 });
-sprite.src = new URL('../../assets/pet/placeholder-sprite-sheet.png', import.meta.url).href;
+sprite.addEventListener('error', () => {
+  xpDetail.textContent = "Could not load Boi's image. Update and reload the extension.";
+});
+sprite.src = new URL('../../assets/pets/placeholder-sprite-sheet.png', import.meta.url).href;
 
 function applyPetColor(colorId, secondaryId = selectedSecondaryColor) {
   selectedColor = PET_COLORS.some(color => color.id === colorId) ? colorId : 'blue';
@@ -316,7 +338,6 @@ async function restorePetColor() {
 }
 restorePetColor();
 
-const petButton = document.querySelector('.pet-interact');
 const mood = createPetMood();
 const reactions = [
   { motion: 'hop', expression: 'surprised' },
@@ -332,8 +353,8 @@ petButton.addEventListener('click', () => {
   const waking = sleeping;
   sleeping = false;
   delete petButton.dataset.sleeping;
-  petButton.setAttribute('aria-label', 'Play with Boi');
-  petButton.title = 'Click to play with Boi';
+  petButton.setAttribute('aria-label', `Play with ${petName}`);
+  petButton.title = `Click to play with ${petName}`;
   window.clearTimeout(reactionTimer);
   const { grumpy, duration } = mood.click();
   const reaction = grumpy ? { motion: 'grumpy', expression: 'grumpy' }
@@ -365,8 +386,8 @@ function recordPresence(checkAbsence = false) {
         delete petButton.dataset.reaction;
         sleeping = true;
         petButton.dataset.sleeping = 'true';
-        petButton.setAttribute('aria-label', 'Wake Boi');
-        petButton.title = 'Click to wake Boi';
+        petButton.setAttribute('aria-label', `Wake ${petName}`);
+        petButton.title = `Click to wake ${petName}`;
         drawExpression('sleeping');
       }
     }
