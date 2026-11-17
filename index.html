@@ -1,39 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>It's Your Boi</title>
-  <link href="src/css/main.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>It's Your Boi · Start</title>
+  <link href="src/features/pet-home/pet-home.css" rel="stylesheet">
+  <link href="src/css/index.css" rel="stylesheet">
+  <script src="src/features/main/index.js?v=2" defer></script>
 </head>
-
 <body>
-  <header>
-    <h1>Welcome to It's Your Boi!</h1>
-    <h3>Your New Study Buddy Extentsion!</h3>
-  </header>
-  <main>
-    <p id="petNameDisplay" aria-live="polite">Loading pet name...</p>
-    <button id="resetStorageButton" type="button">Reset Sync Storage</button>
-    <a href="src/features/pomodoro/pomodoro.html">Pomodoro Timer</a>
-    <a href="src/features/todo/todo.html">To-do List</a>
-    <a href="src/features/main/createPet/createPet.html">Create Pet</a>
-    <a>flashcards</a>
-    <p>etc.</p>
+  <main class="start-page">
+    <header class="start-brand"><span aria-hidden="true">✦</span> IT'S YOUR BOI <span class="brand-caption">YOUR LITTLE FOCUS COMPANION</span></header>
+
+    <section class="welcome-card" aria-labelledby="welcome-title">
+      <div class="welcome-copy">
+        <p class="eyebrow">A FRESH START, EVERY DAY</p>
+        <h1 id="welcome-title">Small steps.<br>Good company.</h1>
+        <p>Make time for your goals.<br>Your boi will grow along with you.</p>
+      </div>
+      <div class="welcome-landscape" aria-hidden="true"><span class="landscape-sun"></span><span class="landscape-cloud"></span><span class="landscape-hills"></span><span class="landscape-path"></span><span class="landscape-flower"></span></div>
+      <div class="buddy-card">
+        <div class="buddy-heading"><span class="status-dot" aria-hidden="true"></span><p id="petNameDisplay" role="status" aria-live="polite">Getting your buddy ready...</p></div>
+        <a class="primary-link" id="buddyLink" href="src/features/main/createPet/createPet.html"><span id="buddyLinkLabel">Meet your boi</span><span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="activity-section" aria-labelledby="activity-title">
+      <div class="section-heading"><h2 id="activity-title">MAKE A LITTLE PROGRESS</h2><span aria-hidden="true">✦</span></div>
+      <nav class="activity-grid" aria-label="Main navigation">
+        <a class="activity-link" href="src/features/pomodoro/pomodoro.html"><span class="menu-icon clock-icon" aria-hidden="true"></span><span class="activity-title">Focus time</span><span class="activity-description">One session at a time.</span><span class="activity-arrow" aria-hidden="true">↗</span></a>
+        <a class="activity-link" href="src/features/todo/todo.html"><span class="menu-icon task-icon" aria-hidden="true"></span><span class="activity-title">Your tasks</span><span class="activity-description">Little wins add up.</span><span class="activity-arrow" aria-hidden="true">↗</span></a>
+        <a class="activity-link" href="src/features/pet-home/pet-home.html"><span class="menu-icon home-icon" aria-hidden="true"></span><span class="activity-title">Pet home</span><span class="activity-description">Check in on your boi.</span><span class="activity-arrow" aria-hidden="true">↗</span></a>
+        <a class="activity-link" href="src/features/fun-things/fun-things.html"><span class="menu-icon fun-icon" aria-hidden="true"></span><span class="activity-title">Fun things</span><span class="activity-description">Take a playful break.</span><span class="activity-arrow" aria-hidden="true">↗</span></a>
+      </nav>
+    </section>
+
+    <footer class="start-footer">
+      <p>A LITTLE FOCUS. A LITTLE FRIENDSHIP.</p>
+      <div class="footer-links"><a href="index.html" target="_blank" rel="noopener">Open in a new tab ↗</a><span aria-hidden="true">·</span><a target="_blank" rel="noopener noreferrer" href="https://github.com/Spiderforestg/ItsYourBoi">Source code ↗</a></div>
+      <details class="data-settings"><summary>Saved data</summary><p id="resetDescription">Clear synced extension data, including your pet name and focus progress.</p><button id="resetStorageButton" type="button">Reset synced data</button><p id="resetStatus" role="status" aria-live="polite"></p></details>
+    </footer>
   </main>
-  <section id="main">
-    <p>//This is where we'll put the javascript canvas</p>
-  </section>
-
-  <footer>
-    <img alt="Logo Img" src="src/assets/icon.svg" id="logo">
-    <div id="credits">
-      <a href="index.html">Open In New Page</a>
-      <br>
-      <a target="_blank" href="https://github.com/Spiderforestg/ItsYourBoi">See The Source Code</a>
-    </div>
-  </footer>
-  <script src="src/features/main/index.js" defer></script>
 </body>
-
 </html>

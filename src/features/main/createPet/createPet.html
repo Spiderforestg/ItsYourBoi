@@ -4,19 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Name Your Pet · It's Your Boi</title>
+    <link href="../../pet-home/pet-home.css" rel="stylesheet">
     <link href="../../../css/createPet.css" rel="stylesheet">
 </head>
 <body>
-    <h1>It's Your Boi</h1>
-    <p>Welcome to It's Your Boi! <br>Your personal
-    pet that grows with you as you study and complete tasks! <br>
-    Please enter a pet name below to begin your journey!</p>
-    <form id="nameForm">
-        <label for="petName">Enter Pet Name Below</label>
-        <input type="text" id="petName" name="petName" required>
-        <button type="submit">Submit</button>
-    </form>
-    <p id="greeting" aria-live="polite"></p>
+    <main class="onboarding">
+        <header class="brand"><span class="brand-mark" aria-hidden="true">✦</span> IT'S YOUR BOI <span class="brand-note">A LITTLE STUDY BUDDY</span></header>
+        <section class="create-card" aria-labelledby="welcome-title">
+            <div class="welcome-heading">
+                <p class="eyebrow">NEW FRIEND · NEW BEGINNING</p>
+                <h1 id="welcome-title">Meet your study buddy.</h1>
+                <p>A little company for your big goals.</p>
+            </div>
+            <div class="pet-stage welcome-room" role="img" aria-label="Your new pixel pet waiting in a cozy room">
+                <div class="window" aria-hidden="true"><span class="celestial"></span><span class="cloud"></span><span class="landscape"></span></div>
+                <span class="hello-bubble" aria-hidden="true">HI, FRIEND!</span>
+                <div class="floor" aria-hidden="true"></div>
+                <div class="rug" aria-hidden="true"></div>
+                <div class="pet-shadow" aria-hidden="true"></div>
+                <canvas class="pet welcome-pet" width="22" height="25" aria-hidden="true"></canvas>
+            </div>
+            <div class="name-panel">
+                <div class="journey-note"><span class="journey-star" aria-hidden="true">✦</span><p>Study, finish tasks, and grow together.<br>Every little bit of focus counts.</p></div>
+                <form id="nameForm">
+                    <label for="petName">What should we call your boi?</label>
+                    <input type="text" id="petName" name="petName" placeholder="Your buddy's name" autocomplete="off" required aria-describedby="name-hint greeting">
+                    <p class="field-hint" id="name-hint">A small name. The start of a big friendship.</p>
+                    <button class="begin-button" type="submit"><span>Let's be friends</span><span aria-hidden="true">→</span></button>
+                </form>
+                <p id="greeting" role="status" aria-live="polite"></p>
+            </div>
+        </section>
+        <footer class="welcome-footer">ONE TASK AT A TIME. TOGETHER.</footer>
+    </main>
     <script src="createPet.js" defer></script>
 </body>
 </html>
