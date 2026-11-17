@@ -13,6 +13,25 @@ let progressState;
 let prototypeXP = 0;
 let focusBaseline = 0;
 
+let petName = 'Boi';
+
+const petNameElement = document.querySelector('.pet-name');
+const petButton = document.querySelector('.pet-interact');
+
+async function loadPetName() {
+  try {
+    const saved = await chrome.storage.sync.get('petName');
+    petName = saved.petName || 'Boi';
+    petNameElement.textContent = petName;
+    petButton.setAttribute('aria-label', `Play with ${petName}`);
+    petButton.title = `Click to play with ${petName}`;
+  } catch (error) {
+    console.error('Could not load pet name:', error);
+  }
+}
+
+loadPetName();
+
 function renderProgress(state, bonusXP = prototypeXP, baseline = focusBaseline) {
   progressState = state;
   prototypeXP = bonusXP;
@@ -319,7 +338,6 @@ async function restorePetColor() {
 }
 restorePetColor();
 
-const petButton = document.querySelector('.pet-interact');
 const mood = createPetMood();
 const reactions = [
   { motion: 'hop', expression: 'surprised' },
@@ -335,8 +353,8 @@ petButton.addEventListener('click', () => {
   const waking = sleeping;
   sleeping = false;
   delete petButton.dataset.sleeping;
-  petButton.setAttribute('aria-label', 'Play with Boi');
-  petButton.title = 'Click to play with Boi';
+  petButton.setAttribute('aria-label', `Play with ${petName}`);
+  petButton.title = `Click to play with ${petName}`;
   window.clearTimeout(reactionTimer);
   const { grumpy, duration } = mood.click();
   const reaction = grumpy ? { motion: 'grumpy', expression: 'grumpy' }
@@ -368,8 +386,8 @@ function recordPresence(checkAbsence = false) {
         delete petButton.dataset.reaction;
         sleeping = true;
         petButton.dataset.sleeping = 'true';
-        petButton.setAttribute('aria-label', 'Wake Boi');
-        petButton.title = 'Click to wake Boi';
+        petButton.setAttribute('aria-label', `Wake ${petName}`);
+        petButton.title = `Click to wake ${petName}`;
         drawExpression('sleeping');
       }
     }
