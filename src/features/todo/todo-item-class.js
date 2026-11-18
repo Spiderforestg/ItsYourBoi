@@ -1,9 +1,8 @@
 export class todoItem {
     // Item can be type "daily", "weekly", or "once"
-    constructor(name, type) {
+    constructor(name, difficulty) {
         this.name=name;
-        this.type=type;
-
+        this.difficulty=difficulty;
         this.completed = false;
     }
 

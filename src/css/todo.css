@@ -4,7 +4,7 @@
 
     .todo-row {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         margin: 10px;
 
         .todo-header {
@@ -12,13 +12,59 @@
         }
 
         .todo-name {
-            text-align: left;
             grid-column: 1 / 2;
         }
 
-        .todo-type {
-            text-align: right;
+        .todo-difficulty {
             grid-column: 2 / 3;
         }
+
+        .todo-completed {
+            grid-column: 3 / 4;
+        }
+    }
+    .completed-row {
+        text-decoration: line-through;
     }
 }
+
+#todo-form {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+
+    #name-label {
+        grid-column: 1 / 3;
+    }
+    #name {
+        grid-column: 3 / 5;
+    }
+
+    #easy, #medium, #hard {
+        grid-row: 2 / 3;
+    }
+
+    #easy-button, #easy {
+        grid-column: 1 / 3;
+    }
+    #medium-button, #medium {
+        grid-column: 3 / 5;
+    }
+    #hard-button, #hard {
+        grid-column: 5 / 7;
+    }
+
+    #add-item-button {
+        grid-column: 1 / 4;
+    }
+    #clear-list-button {
+        grid-column: 4 / 7;
+    }
+
+    #form-error {
+        grid-column: 1 / 7;
+        color: red;
+        text-align: center;
+    }
+}   

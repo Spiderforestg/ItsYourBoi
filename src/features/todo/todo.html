@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>It's Your Boi To-do List</title>
+  <title>Tasks | It's Your Boi</title>
   <link href="../../css/main.css" rel="stylesheet">
   <link href="../../css/todo.css" rel="stylesheet">
   <script src="todo.js" type="module"></script>
@@ -20,26 +20,28 @@
       <table id="todo-table">
         <tr class="todo-row">
           <td class="todo-header" class="todo-name">Name</td>
-          <td class="todo-header" class="todo-type">Type</td>
+          <td class="todo-header" class="todo-difficulty">Difficulty</td>
+          <td class="todo-header" class="todo-completed">Completed</td>
         </tr>
       </table>
 
       <!--Form to add a To-do list item-->
       <form id="todo-form">
         <!--Input a name for the To-do item-->
-        <label for="name">Name</label>
+        <label id="name-label" for="name">Name</label>
         <input id="name" name="name" type="text" placeholder="Name">
         <br>
       
-        <input id="once" name="type" type="radio" value="Once" checked>
-        <label for="once">Once</label>
-        <input id="daily" name="type" type="radio" value="Daily">
-        <label for="daily">Daily</label>
-        <input id="weekly" name="type" type="radio" value="Weekly">
-        <label for="weekly">Weekly</label>
+        <input id="easy" name="difficulty" type="radio" value="Easy" checked>
+        <button id="easy-button" for="easy">Easy</button>
+        <input id="medium" name="difficulty" type="radio" value="Medium">
+        <button id="medium-button" for="medium">Medium</button>
+        <input id="hard" name="difficulty" type="radio" value="Hard">
+        <button id="hard-button" for="hard">Hard</button>
         <br>
 
         <input id="add-item-button" type="button" value="Add item">
+        <input id="clear-list-button" type="button" value="Clear List">
         <br>
 
         <span id="form-error"></span>
