@@ -183,7 +183,10 @@ function initializeRadioButton(buttonId, radioId) {
 function clearButtonsBackground() {
     const allButtons = document.querySelectorAll('button');
     allButtons.forEach(button => {
-        button.style.backgroundColor = "initial";
+        if (button.id == "easy") {
+            button.style.backgroundColor = "lightgreen";
+        }
+        else button.style.backgroundColor = "initial";
     });
 }
 
