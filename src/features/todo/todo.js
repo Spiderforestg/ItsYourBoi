@@ -175,18 +175,12 @@ function initializeRadioButton(buttonId, radioId) {
         buttonElement.style.backgroundColor = "lightgreen";
     })
 
-    if (radioId == 'easy') {
-        buttonElement.style.backgroundColor = "lightgreen";
-    }
-    else buttonElement.style.backgroundColor = "initial";
+    buttonElement.style.backgroundColor = "initial";
 }
 function clearButtonsBackground() {
     const allButtons = document.querySelectorAll('button');
     allButtons.forEach(button => {
-        if (button.id == "easy") {
-            button.style.backgroundColor = "lightgreen";
-        }
-        else button.style.backgroundColor = "initial";
+        button.style.backgroundColor = "initial";
     });
 }
 
