@@ -21,7 +21,9 @@ button, input, select, textarea { font-family: inherit; }
 html { width: 350px; min-width: 350px; }
 body { width: 100%; margin: 0; }
 .home { padding: 4px 14px 14px; display: flex; flex-direction: column; }
-.pet-room { height: 367px; display: flex; flex-direction: column; border: 3px solid var(--ink); border-bottom: 0; box-shadow: 4px 4px 0 #c5bea8; }
+.pet-room { min-height: 367px; display: flex; flex-direction: column; border: 3px solid var(--ink); border-bottom: 0; box-shadow: 4px 4px 0 #c5bea8; }
+.focus-widget { display: block; flex: 0 0 auto; width: 100%; height: 351px; border: 0; background: #f9f5e7; }
+.focus-widget[hidden] { display: none; }
 .pet-stage { flex: 1; min-height: 0; position: relative; height: 262px; overflow: hidden; isolation: isolate; background: repeating-linear-gradient(90deg, transparent 0 38px, #d0dbc5 38px 40px), #e0e7cf; }
 .prototype-controls { position: absolute; z-index: 2; top: 12px; right: 12px; display: flex; gap: 6px; }
 .prototype-xp { display: grid; gap: 3px; padding: 7px 9px; border: 2px solid var(--ink); border-radius: 0; box-shadow: 2px 2px 0 #a8ae91; background: #f9f5e7; color: inherit; font: normal 16px "m5x7", monospace; cursor: pointer; }

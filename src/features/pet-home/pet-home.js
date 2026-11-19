@@ -1,7 +1,7 @@
 import { getRoomScene } from './room-scene.mjs';
 import { PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
 import { createPetMood, PET_LAST_SEEN_KEY, shouldPetSleep } from './pet-mood.mjs';
-import { KEY, initialState, settle } from '../pomodoro/timer.mjs';
+import { KEY, focusMinutesEarned, initialState, settle } from '../pomodoro/timer.mjs';
 import { getPetProgress, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY } from './pet-progress.mjs';
 
 const extension = Boolean(globalThis.chrome?.runtime?.id);
@@ -9,9 +9,41 @@ const levelLabel = document.querySelector('.pet-level');
 const xpCount = document.querySelector('.xp-count');
 const xpBar = document.querySelector('.xp-bar');
 const xpDetail = document.querySelector('.xp-detail');
+const petProgress = document.querySelector('.pet-progress');
+const petStage = document.querySelector('.pet-stage');
+const focusWidget = document.querySelector('.focus-widget');
 let progressState;
 let prototypeXP = 0;
 let focusBaseline = 0;
+
+// Swap between the pet room and focus timer, and mark the selected navigation item.
+function selectRoomView(view) {
+  const showingFocus = view === 'focus';
+  petProgress.hidden = showingFocus;
+  petStage.hidden = showingFocus;
+  focusWidget.hidden = !showingFocus;
+  document.querySelectorAll('.home-menus [data-view]').forEach(link => {
+    if (link.dataset.view === view) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  if (!showingFocus) refreshProgress();
+}
+
+document.querySelectorAll('.home-menus [data-view]').forEach(link => {
+  link.addEventListener('click', event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    selectRoomView(link.dataset.view);
+  });
+});
+
+// Let the room follow the widget height, including when its settings open.
+focusWidget.addEventListener('load', () => {
+  const widget = focusWidget.contentDocument.querySelector('.widget');
+  const resizeWidget = () => { focusWidget.style.height = `${widget.offsetHeight}px`; };
+  resizeWidget();
+  new ResizeObserver(resizeWidget).observe(widget);
+});
 
 let petName = 'Boi';
 
@@ -36,13 +68,13 @@ function renderProgress(state, bonusXP = prototypeXP, baseline = focusBaseline) 
   progressState = state;
   prototypeXP = bonusXP;
   focusBaseline = baseline;
-  const { level, xp, totalXP, requiredXP } = getPetProgress(state?.focusMinutes, bonusXP, baseline);
+  const { level, xp, totalXP, requiredXP } = getPetProgress(focusMinutesEarned(state), bonusXP, baseline);
   levelLabel.textContent = `Lv. ${level}`;
   xpCount.textContent = `${xp} / ${requiredXP} XP`;
   xpBar.max = requiredXP;
   xpBar.value = xp;
   xpBar.setAttribute('aria-valuetext', `Level ${level}, ${xp} of ${requiredXP} XP toward next level`);
-  xpDetail.textContent = 'Completed focus: 1 min = 1 XP';
+  xpDetail.textContent = 'Focus time: 1 min = 1 XP';
   xpBar.title = `Total: ${totalXP} XP`;
 }
 
@@ -65,7 +97,8 @@ async function refreshProgress() {
 
 if (extension) {
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'local' && (changes[KEY] || changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY])) {
+    if ((area === 'sync' && changes[KEY]) ||
+        (area === 'local' && (changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY]))) {
       renderProgress(changes[KEY] ? changes[KEY].newValue : progressState,
         changes[PET_BONUS_XP_KEY] ? changes[PET_BONUS_XP_KEY].newValue : prototypeXP,
         changes[PET_XP_BASELINE_KEY] ? changes[PET_XP_BASELINE_KEY].newValue : focusBaseline);
@@ -111,7 +144,7 @@ resetXPButton.addEventListener('click', async () => {
       const saved = localStorage.getItem(KEY);
       state = settle(saved ? JSON.parse(saved) : initialState()).state;
     }
-    const baseline = getPetProgress(state.focusMinutes).totalXP;
+    const baseline = getPetProgress(focusMinutesEarned(state)).totalXP;
     if (extension) {
       await chrome.storage.local.set({ [PET_BONUS_XP_KEY]: 0, [PET_XP_BASELINE_KEY]: baseline });
     } else {
@@ -143,7 +176,7 @@ updateRoomScene();
 window.setInterval(() => {
   if (!document.hidden) {
     updateRoomScene();
-    if (!extension) refreshProgress();
+    refreshProgress();
   }
 }, 60_000);
 document.addEventListener('visibilitychange', () => {

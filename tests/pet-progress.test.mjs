@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getPetProgress } from '../src/features/pet-home/pet-progress.mjs';
+import { focusMinutesEarned, initialState, transition } from '../src/features/pomodoro/timer.mjs';
 
 test('level costs grow by 100 XP and surplus carries into the next level', () => {
   for (const [total, level, xp, requiredXP] of [
@@ -19,6 +20,12 @@ test('prototype XP combines with earned XP without changing focus time', () => {
   assert.deepEqual(getPetProgress(-5, NaN), getPetProgress(0));
   assert.deepEqual(getPetProgress(Infinity, -50), getPetProgress(0));
   assert.equal(getPetProgress(50.9, 50.9).totalXP, 100);
+});
+
+test('active focus minutes immediately advance the pet XP display', () => {
+  const state = transition(initialState(), { type: 'start' }, 0);
+  assert.equal(getPetProgress(focusMinutesEarned(state, 60_000)).totalXP, 1);
+  assert.equal(getPetProgress(focusMinutesEarned(state, 5 * 60_000)).totalXP, 5);
 });
 
 test('reset baseline clears pet XP and only future focus minutes earn XP', () => {

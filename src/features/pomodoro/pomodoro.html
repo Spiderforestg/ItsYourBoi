@@ -1,103 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Pomodoro · It's Your Boi</title>
-		<link rel="stylesheet" href="pomodoro.css">
-		<script type="module" src="pomodoro.js"></script>
-	</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pomodoro.css">
+    <title>Pomodoro - It's Your Boi</title>
+</head>
+<body>
+    <section class="widget" aria-label="Pomodoro timer">
+        <section class="timer-card" aria-label="Pomodoro timer">
+            <div class="modes" role="group" aria-label="Session type">
+                <button type="button" data-mode="focus" aria-pressed="true">Focus</button>
+                <button type="button" data-mode="short" aria-pressed="false">Short break</button>
+                <button type="button" data-mode="long" aria-pressed="false">Long break</button>
+            </div>
 
-	<body>
-		<main class="app">
-				<button
-					id="settings-toggle"
-					class="icon-button"
-					aria-label="Timer settings"
-					aria-expanded="false"
-					aria-controls="settings"
-				>⚙</button>
+            <div class="dial" id="dial">
+                <div class="dial-inner">
+                    <span class="phase" id="phase">TIME TO LOCK IN</span>
+                    <div id="time" role="timer" aria-label="Time remaining">25:00</div>
+                    <span class="timer-hint" id="timer-hint">Next: short break</span>
+                </div>
+            </div>
 
-			<section class="timer-card" aria-label="Pomodoro timer">
-				<div class="modes" role="group" aria-label="Session type">
-					<button data-mode="focus" aria-pressed="true">Focus</button>
-					<button data-mode="short" aria-pressed="false">Short break</button>
-					<button data-mode="long" aria-pressed="false">Long break</button>
-				</div>
+            <div class="controls">
+                <button id="reset" class="icon-button" type="button" aria-label="Reset current session">↺</button>
+                <button id="start" class="primary" type="button">Start focusing <span aria-hidden="true">▶</span></button>
+                <button id="settings-toggle" class="icon-button" type="button" aria-label="Timer settings" aria-expanded="false" aria-controls="settings">⚙</button>
+            </div>
 
-				<div class="dial" id="dial">
-					<div class="dial-inner">
-						<div id="time" role="timer" aria-label="Time remaining">25:00</div>
-					</div>
-				</div>
+            <div id="cycle" class="cycle" role="group" aria-label="Focus sessions in this cycle">
+                <span class="cycle-dot filled" aria-hidden="true"></span>
+                <span class="cycle-dot filled" aria-hidden="true"></span>
+                <span class="cycle-dot" aria-hidden="true"></span>
+                <span class="cycle-dot" aria-hidden="true"></span>
+                <span class="cycle-label">2/4 to a long break</span>
+            </div>
+            <p id="message" class="message" role="status" hidden></p>
+        </section>
 
-				<div class="controls">
-					<button id="reset" class="icon-button" aria-label="Reset current session">↺</button>
-					<button id="start" class="primary">
-						Start focusing <span>▶</span>
-					</button>
-					<button id="skip" class="icon-button" aria-label="Skip to next session">⇥</button>
-				</div>
-
-				<div id="cycle" class="cycle" aria-label="Focus sessions in this cycle"></div>
-				<p id="next" class="next">A short break follows your focus session.</p>
-			</section>
-
-			<section id="settings" class="panel" hidden>
-				<h2>Find your rhythm</h2>
-				<p>Changing lengths resets the current timer.</p>
-
-				<form id="settings-form">
-					<div class="settings-grid">
-						<label>
-							Focus
-							<input name="focus" type="number" min="1" max="120" step="1" required>
-						</label>
-						<label>
-							Short break
-							<input name="short" type="number" min="1" max="120" step="1" required>
-						</label>
-						<label>
-							Long break
-							<input name="long" type="number" min="1" max="120" step="1" required>
-						</label>
-					</div>
-
-					<div class="settings-footer">
-						<button class="small-button">Save lengths</button>
-					</div>
-				</form>
-			</section>
-
-			<section class="tasks">
-				<div class="section-heading">
-					<h2>A little game plan</h2>
-					<span id="task-count">0/0 done</span>
-				</div>
-
-				<form id="task-form">
-					<input
-						id="task-title"
-						maxlength="120"
-						placeholder="What are you working on?"
-						aria-label="New task"
-						required
-						autocomplete="off"
-					>
-					<button aria-label="Add task">+</button>
-				</form>
-
-				<ul id="task-list"></ul>
-				<p id="empty-tasks">Clear your head. Give one task your attention.</p>
-			</section>
-
-			<footer>
-				<span class="status-dot"></span>
-				<span id="environment">Your progress stays on this device.</span>
-				<button id="open-tab" class="text-button">Open in tab ↗</button>
-			</footer>
-
-			<p id="message" role="status" aria-live="polite"></p>
-		</main>
-	</body>
+        <section id="settings" class="panel" aria-labelledby="settings-title" hidden>
+            <div class="panel-heading">
+                <h2 id="settings-title">SESSION LENGTHS</h2>
+                <span>MIN</span>
+            </div>
+            <p>Find your rhythm. Changing lengths resets the current timer.</p>
+            <form id="settings-form">
+                <div class="settings-grid">
+                    <label>Focus<input name="focus" type="number" min="1" max="120" step="1" value="25" required></label>
+                    <label>Short break<input name="short" type="number" min="1" max="120" step="1" value="5" required></label>
+                    <label>Long break<input name="long" type="number" min="1" max="120" step="1" value="15" required></label>
+                </div>
+                <button class="small-button" type="submit">Save lengths</button>
+            </form>
+        </section>
+    </section>
+    <script type="module" src="pomodoro.js"></script>
+</body>
 </html>

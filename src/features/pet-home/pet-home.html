@@ -13,12 +13,13 @@
       <section class="pet-progress" aria-label="Pet level and experience">
         <div class="xp-heading"><span class="pet-identity"><span class="pet-name">Boi</span><span class="pet-level">Lv. —</span></span><span class="xp-count">— / 100 XP</span></div>
         <progress class="xp-bar" max="100" value="0" aria-label="XP toward next level"></progress>
-        <p class="xp-detail">Completed focus: 1 min = 1 XP</p>
+        <p class="xp-detail">Focus time: 1 min = 1 XP</p>
         <div class="wallet-clock-row">
           <span class="pet-wallet" aria-label="Coins: 0"><span class="coin-icon" aria-hidden="true"></span><span class="coin-count">0</span></span>
           <time class="room-clock" aria-label="Local date and time"></time>
         </div>
       </section>
+      <iframe class="focus-widget" src="../pomodoro/pomodoro.html" title="Pomodoro timer" loading="lazy" hidden></iframe>
       <div class="pet-stage">
         <div class="prototype-controls">
           <button class="prototype-xp" type="button" title="Prototype: add 50 test XP (saved separately from focus time)">+50 XP<span>TEST</span></button>
@@ -39,8 +40,8 @@
     </section>
 
     <nav class="menus home-menus" aria-label="Main navigation">
-      <a href="pet-home.html" aria-current="page"><span class="menu-icon home-icon" aria-hidden="true"></span><span>HOME</span></a>
-      <a href="../pomodoro/pomodoro.html"><span class="menu-icon clock-icon" aria-hidden="true"></span><span>FOCUS</span></a>
+      <a href="pet-home.html" data-view="home" aria-current="page"><span class="menu-icon home-icon" aria-hidden="true"></span><span>HOME</span></a>
+      <a href="../pomodoro/pomodoro.html" data-view="focus"><span class="menu-icon clock-icon" aria-hidden="true"></span><span>FOCUS</span></a>
       <a href="../todo/todo.html"><span class="menu-icon task-icon" aria-hidden="true"></span><span>TASKS</span></a>
       <button type="button" disabled aria-label="Shop (coming soon)" title="Shop: coming soon"><span class="menu-icon shop-icon" aria-hidden="true"></span><span>SHOP</span></button>
       <button type="button" disabled aria-label="Feed (coming soon)" title="ごはん：準備中"><span class="menu-icon food-icon" aria-hidden="true"></span><span>FEED</span></button>
