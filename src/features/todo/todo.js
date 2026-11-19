@@ -7,7 +7,19 @@ import { saveArrayToLocalStorage, loadArrayFromLocalStorage } from '../../utils/
 // Import error handler util
 import { logError } from '../../utils/errors.js';
 
+//Import sync storage util
+import { saveArrayToLocalStorage, loadArrayFromLocalStorage } from '../../utils/syncStorage.js';
+
+// Import error handler util
+import { logError } from '../../utils/errors.js';
+
 // Create an array to hold the To-do items
+const todoArray = [];
+loadArrayFromLocalStorage("todoList").forEach(element => {
+    // Push only objects of class "todoItem" into the array
+    const newTodoItem = new todoItem(element.name, element.difficulty);
+    todoArray.push(newTodoItem);
+});
 const todoArray = [];
 loadArrayFromLocalStorage("todoList").forEach(element => {
     // Push only objects of class "todoItem" into the array
@@ -47,13 +59,45 @@ displayTodoList();
  * ADD ITEM
  * The user can add an item to their to-do list
  */
+document.getElementById('name')
+        .addEventListener('keypress', function(event) {
+            // If the user presses enter, the todo item is submitted
+            if (event.key == "Enter") {
+                event.preventDefault();
+
+                document.getElementById('add-item-button').click();
+            }
+        })
+
+// Add EventListeners to Radio buttons and hide radio elements
+initializeRadioButton('easy-button','easy');
+initializeRadioButton('medium-button','medium');
+initializeRadioButton('hard-button','hard');
+
+
+// Add Event Listener to clear To-do list
+document.getElementById('clear-list-button')
+        .addEventListener('click', clearList);
+
+// After everything else, call the first display
+displayTodoList();
+
+//##### FUNCTIONS #####
+
+/**
+ * ADD ITEM
+ * The user can add an item to their to-do list
+ */
 function addItem(event) {
     // Get values from form
     try {
         const nameValue = document.getElementById('name').value;
         const radioValue = document.querySelector('input[name="difficulty"]:checked')?.value || null;
+        const radioValue = document.querySelector('input[name="difficulty"]:checked')?.value || null;
         
         // DEBUG: Log form responses
+        debugLogConsole(nameValue);
+        debugLogConsole(radioValue);
         debugLogConsole(nameValue);
         debugLogConsole(radioValue);
 
@@ -65,7 +109,13 @@ function addItem(event) {
         clearErrorMessage('form-error');
 
         // Push a new todoItem to the array and save it to localStorage
+        // Clear error message
+        clearErrorMessage('form-error');
+
+        // Push a new todoItem to the array and save it to localStorage
         const newTodoItem = new todoItem(nameValue, radioValue);
+        todoArray.push(newTodoItem);
+        saveArrayToLocalStorage("todoList", todoArray);
         todoArray.push(newTodoItem);
         saveArrayToLocalStorage("todoList", todoArray);
 
@@ -73,11 +123,19 @@ function addItem(event) {
         document.getElementById('name').value = '';
         document.getElementById('easy').checked = true;
         clearButtonsBackground();
+        // Clear the input field and reset radio value
+        document.getElementById('name').value = '';
+        document.getElementById('easy').checked = true;
+        clearButtonsBackground();
 
+        // Display the to-do list
         // Display the to-do list
         displayTodoList();
     }
     catch (err) {
+        logError(err);
+
+        displayErrorMessage('form-error', "Required inputs missing");
         logError(err);
 
         displayErrorMessage('form-error', "Required inputs missing");
@@ -86,6 +144,19 @@ function addItem(event) {
     event.preventDefault();
 }
 
+/**
+ * CLEAR LIST
+ * Clears the To-do List of all its items and refreshes the display
+ */
+function clearList() {
+    while (todoArray.length > 0) {
+        todoArray.pop();
+    };
+    saveArrayToLocalStorage('todoList', todoArray);
+    
+    clearErrorMessage('form-error');
+    displayTodoList();
+}
 /**
  * CLEAR LIST
  * Clears the To-do List of all its items and refreshes the display
@@ -109,9 +180,12 @@ function displayTodoList() {
       <td class="todo-header" class="todo-name">Name</td>
       <td class="todo-header" class="todo-difficulty">Difficulty</td>
       <td class="todo-header" class="todo-completed">Completed</td>
+      <td class="todo-header" class="todo-difficulty">Difficulty</td>
+      <td class="todo-header" class="todo-completed">Completed</td>
     </tr>
     `
     // Loop through the To-do list array and add it to the HTML
+    todoArray.forEach(item => {
     todoArray.forEach(item => {
         const todoItemElement = document.createElement('tr');
         todoItemElement.classList.add('todo-row');
@@ -122,9 +196,27 @@ function displayTodoList() {
         }
 
         let htmlString = `
+        // Draws a line through items that are completed
+        if (item.completed) {
+            todoItemElement.classList.add('completed-row');
+        }
+
+        let htmlString = `
             <td class="todo-name">
                 ${item.name}
             </td>
+            <td class="todo-difficulty">
+                ${item.difficulty}
+            </td>
+            <td class="todo-completed">
+        `;
+
+        if (item.completed) {
+            htmlString += `Yes</td>`;
+        }
+        else htmlString += `No</td>`;
+        
+        todoItemElement.innerHTML = htmlString;
             <td class="todo-difficulty">
                 ${item.difficulty}
             </td>

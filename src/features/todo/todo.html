@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Tasks | It's Your Boi</title>
+  <title>Tasks | It's Your Boi</title>
   <link href="../../css/main.css" rel="stylesheet">
   <link href="../../css/todo.css" rel="stylesheet">
   <script src="todo.js" type="module"></script>
@@ -22,12 +23,15 @@
           <td class="todo-header" class="todo-name">Name</td>
           <td class="todo-header" class="todo-difficulty">Difficulty</td>
           <td class="todo-header" class="todo-completed">Completed</td>
+          <td class="todo-header" class="todo-difficulty">Difficulty</td>
+          <td class="todo-header" class="todo-completed">Completed</td>
         </tr>
       </table>
 
       <!--Form to add a To-do list item-->
       <form id="todo-form">
         <!--Input a name for the To-do item-->
+        <label id="name-label" for="name">Name</label>
         <label id="name-label" for="name">Name</label>
         <input id="name" name="name" type="text" placeholder="Name">
         <br>
@@ -41,6 +45,7 @@
         <br>
 
         <input id="add-item-button" type="button" value="Add item">
+        <input id="clear-list-button" type="button" value="Clear List">
         <input id="clear-list-button" type="button" value="Clear List">
         <br>
 
