@@ -9,7 +9,7 @@ const setForm = document.querySelector('.set-form');
 const setNameInput = document.querySelector('#set-name');
 const setStatus = document.querySelector('.set-status');
 const activeSetName = document.querySelector('.active-set-name');
-const changeSetButton = document.querySelector('.change-set-button');
+const changeSetButton = document.querySelector('.back-to-sets');
 const importButton = document.querySelector('[data-action="import"]');
 const exportButton = document.querySelector('[data-action="export"]');
 const transferDialog = document.querySelector('.transfer-dialog');
