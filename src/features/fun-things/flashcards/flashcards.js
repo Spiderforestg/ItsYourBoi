@@ -1,6 +1,26 @@
 const STORAGE_KEY = 'flashcards';
+const SETS_STORAGE_KEY = 'flashcardSets';
 const extension = Boolean(globalThis.chrome?.runtime?.id && globalThis.chrome?.storage?.sync);
 
+const setWindow = document.querySelector('.set-window');
+const workspace = document.querySelector('.flashcard-workspace');
+const setList = document.querySelector('.set-list');
+const setForm = document.querySelector('.set-form');
+const setNameInput = document.querySelector('#set-name');
+const setStatus = document.querySelector('.set-status');
+const activeSetName = document.querySelector('.active-set-name');
+const changeSetButton = document.querySelector('.change-set-button');
+const importButton = document.querySelector('[data-action="import"]');
+const exportButton = document.querySelector('[data-action="export"]');
+const transferDialog = document.querySelector('.transfer-dialog');
+const importForm = document.querySelector('.import-form');
+const importText = document.querySelector('#import-text');
+const importStatus = document.querySelector('.import-status');
+const cancelImportButton = document.querySelector('.cancel-import-button');
+const exportDialog = document.querySelector('.export-dialog');
+const exportText = document.querySelector('.export-text');
+const closeExportButton = document.querySelector('.close-export-button');
+const copyExportButton = document.querySelector('.copy-export-button');
 const form = document.querySelector('.flashcard-form');
 const titleInput = document.querySelector('#card-title');
 const descriptionInput = document.querySelector('#card-description');
@@ -10,6 +30,8 @@ const cardCount = document.querySelector('.card-count');
 const cardList = document.querySelector('.card-list');
 const emptyState = document.querySelector('.empty-state');
 
+let sets = [];
+let currentSet = null;
 let cards = [];
 
 function createCard(title, description) {
@@ -39,40 +61,180 @@ function parseStoredCards(stored) {
 }
 
 function serializeCards() {
-  return cards.map(card => `${card.title},${card.description}`).join('\n');
+  return cards.map(card => {
+    const title = card.title.replace(/\r?\n/g, ' ');
+    const description = card.description.replace(/\r?\n/g, ' ');
+    return `${title},${description}`;
+  }).join('\n');
 }
 
-async function loadCards() {
+function parseStoredSets(stored) {
+  if (!Array.isArray(stored)) return [];
+  return stored
+    .filter(set => set && set.id && set.name)
+    .map(set => ({
+      id: set.id,
+      name: set.name,
+      cards: parseStoredCards(set.cards),
+    }));
+}
+
+function serializeSets() {
+  return sets.map(set => ({
+    id: set.id,
+    name: set.name,
+    cards: set.cards.map(card => {
+      const title = card.title.replace(/\r?\n/g, ' ');
+      const description = card.description.replace(/\r?\n/g, ' ');
+      return `${title},${description}`;
+    }).join('\n'),
+  }));
+}
+
+async function loadSets() {
   try {
+    let storedSets;
     if (extension) {
-      const saved = await chrome.storage.sync.get(STORAGE_KEY);
-      cards = parseStoredCards(saved[STORAGE_KEY]);
-    } else {
-      const saved = localStorage.getItem(STORAGE_KEY) || '';
-      let stored;
-      try {
-        stored = JSON.parse(saved);
-      } catch {
-        stored = saved;
+      const saved = await chrome.storage.sync.get([SETS_STORAGE_KEY, STORAGE_KEY]);
+      storedSets = saved[SETS_STORAGE_KEY];
+      if ((!storedSets || (Array.isArray(storedSets) && storedSets.length === 0)) && saved[STORAGE_KEY]) {
+        sets = [{ id: 'my-flashcards', name: 'My Flashcards', cards: parseStoredCards(saved[STORAGE_KEY]) }];
       }
-      cards = parseStoredCards(stored);
+    } else {
+      storedSets = localStorage.getItem(SETS_STORAGE_KEY) || '';
+      let parsedSets;
+      try {
+        parsedSets = JSON.parse(storedSets);
+      } catch {
+        parsedSets = null;
+      }
+      if (parsedSets) storedSets = parsedSets;
+      else {
+        const legacy = localStorage.getItem(STORAGE_KEY) || '';
+        let storedCards;
+        try { storedCards = JSON.parse(legacy); } catch { storedCards = legacy; }
+        if (legacy) sets = [{ id: 'my-flashcards', name: 'My Flashcards', cards: parseStoredCards(storedCards) }];
+      }
     }
-    await saveCards();
-    renderCards();
+    if (!sets.length) sets = parseStoredSets(storedSets);
+    await saveSets();
+    renderSets();
   } catch (error) {
-    console.error('Could not load flashcards:', error);
-    formStatus.textContent = 'Could not load your cards. Try refreshing the page.';
+    console.error('Could not load flashcard sets:', error);
+    setStatus.textContent = 'Could not load your sets. Try refreshing the page.';
   }
 }
 
-async function saveCards() {
-  const serializedCards = serializeCards();
+async function saveSets() {
   if (extension) {
-    await chrome.storage.sync.set({ [STORAGE_KEY]: serializedCards });
+    await chrome.storage.sync.set({ [SETS_STORAGE_KEY]: serializeSets() });
   } else {
-    localStorage.setItem(STORAGE_KEY, serializedCards);
+    localStorage.setItem(SETS_STORAGE_KEY, JSON.stringify(serializeSets()));
   }
 }
+
+function renderSets() {
+  setList.replaceChildren();
+  for (const set of sets) {
+    const openButton = document.createElement('button');
+    openButton.className = 'set-option';
+    openButton.type = 'button';
+    const name = document.createElement('span');
+    name.textContent = set.name;
+    const count = document.createElement('small');
+    count.textContent = `${set.cards.length} ${set.cards.length === 1 ? 'CARD' : 'CARDS'}`;
+    openButton.append(name, count);
+    openButton.addEventListener('click', () => openSet(set.id));
+    setList.append(openButton);
+  }
+}
+
+function openSet(id) {
+  currentSet = sets.find(set => set.id === id);
+  if (!currentSet) return;
+  cards = currentSet.cards;
+  activeSetName.textContent = currentSet.name;
+  setWindow.hidden = true;
+  workspace.hidden = false;
+  renderCards();
+}
+
+setForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const name = setNameInput.value.trim();
+  if (!name) return;
+  const newSet = { id: globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random()}`, name, cards: [] };
+  sets.push(newSet);
+  try {
+    await saveSets();
+    setForm.reset();
+    setStatus.textContent = '';
+    renderSets();
+    openSet(newSet.id);
+  } catch (error) {
+    sets.pop();
+    console.error('Could not save flashcard set:', error);
+    setStatus.textContent = 'Could not save your set. Please try again.';
+  }
+});
+
+changeSetButton.addEventListener('click', () => {
+  currentSet.cards = cards;
+  renderSets();
+  workspace.hidden = true;
+  setWindow.hidden = false;
+});
+
+importButton.addEventListener('click', () => {
+  importText.value = '';
+  importStatus.textContent = '';
+  transferDialog.showModal();
+  importText.focus();
+});
+
+cancelImportButton.addEventListener('click', () => transferDialog.close());
+
+importForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const importedCards = parseStoredCards(importText.value);
+  if (!importedCards.length) {
+    importStatus.textContent = 'Paste at least one card in the requested format.';
+    return;
+  }
+
+  cards.push(...importedCards);
+  try {
+    await saveSets();
+    renderCards();
+    transferDialog.close();
+  } catch (error) {
+    cards.splice(-importedCards.length, importedCards.length);
+    console.error('Could not import flashcards:', error);
+    importStatus.textContent = 'Could not import your cards. Please try again.';
+  }
+});
+
+exportButton.addEventListener('click', () => {
+  if (!currentSet) return;
+  exportText.value = serializeCards();
+  exportDialog.showModal();
+  exportText.focus();
+});
+
+closeExportButton.addEventListener('click', () => exportDialog.close());
+
+copyExportButton.addEventListener('click', async () => {
+  exportText.focus();
+  exportText.select();
+  exportText.setSelectionRange(0, exportText.value.length);
+  try {
+    await navigator.clipboard.writeText(exportText.value);
+  } catch {
+    document.execCommand('copy');
+  }
+  copyExportButton.textContent = 'COPIED';
+  setTimeout(() => { copyExportButton.textContent = 'COPY'; }, 1200);
+});
 
 function renderCards() {
   cardList.replaceChildren();
@@ -183,7 +345,7 @@ async function saveEditedCard(id, titleInput, descriptionInput, saveButton) {
   saveButton.disabled = true;
 
   try {
-    await saveCards();
+    await saveSets();
     renderCards();
   } catch (error) {
     Object.assign(card, originalCard);
@@ -200,7 +362,7 @@ async function deleteCard(id) {
   const deletedCard = cards[cardIndex];
   cards.splice(cardIndex, 1);
   try {
-    await saveCards();
+    await saveSets();
     renderCards();
   } catch (error) {
     cards.splice(cardIndex, 0, deletedCard);
@@ -221,7 +383,7 @@ form.addEventListener('submit', async event => {
   cards.unshift(createCard(title, description));
 
   try {
-    await saveCards();
+    await saveSets();
     renderCards();
     form.reset();
     titleInput.focus();
@@ -234,4 +396,4 @@ form.addEventListener('submit', async event => {
   }
 });
 
-loadCards();
+loadSets();

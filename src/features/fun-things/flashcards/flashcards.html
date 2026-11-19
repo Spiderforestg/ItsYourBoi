@@ -9,14 +9,36 @@
 </head>
 <body>
   <main class="flashcards-page">
-    <header class="page-heading">
-      <a class="back-link" href="../../pet-home/pet-home.html">← HOME</a>
+    <section class="set-window" aria-labelledby="sets-title">
+      <a class="back-link home-button" href="../../pet-home/pet-home.html">← HOME</a>
       <p class="eyebrow">STUDY TOOL</p>
-      <h1>FLASHCARDS</h1>
-      <p class="intro">Make a card to help something stick.</p>
-    </header>
+      <h1 id="sets-title">FLASHCARD SETS</h1>
+      <p class="set-intro">Choose a set to open, or start a new one.</p>
+      <div class="set-list" aria-live="polite"></div>
+      <form class="set-form">
+        <label for="set-name">New set name</label>
+        <input id="set-name" type="text" placeholder="e.g. Biology" autocomplete="off" required>
+        <button class="create-button" type="submit">CREATE SET <span aria-hidden="true">→</span></button>
+        <p class="set-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
 
-    <section class="card-panel" aria-labelledby="create-title">
+    <section class="flashcard-workspace" hidden>
+      <header class="page-heading">
+        <div class="workspace-links">
+          <a class="back-link home-button" href="../../pet-home/pet-home.html">← HOME</a>
+          <div class="workspace-actions">
+            <button class="change-set-button" type="button">ALL SETS</button>
+            <button class="change-set-button" type="button" data-action="import">IMPORT</button>
+            <button class="change-set-button" type="button" data-action="export">EXPORT</button>
+          </div>
+        </div>
+        <p class="eyebrow">STUDY TOOL</p>
+        <h1>FLASHCARDS</h1>
+        <p class="intro">Set: <span class="active-set-name"></span></p>
+      </header>
+
+      <section class="card-panel" aria-labelledby="create-title">
       <div class="panel-heading">
         <span class="panel-icon" aria-hidden="true">✦</span>
         <div>
@@ -40,9 +62,9 @@
         <button class="create-button" type="submit">CREATE FLASHCARD <span aria-hidden="true">→</span></button>
         <p class="form-status" role="status" aria-live="polite"></p>
       </form>
-    </section>
+      </section>
 
-    <section class="cards-panel" id="cards" aria-labelledby="cards-title">
+      <section class="cards-panel" id="cards" aria-labelledby="cards-title">
       <div class="section-heading">
         <h2 id="cards-title">YOUR CARDS</h2>
         <span class="card-count">0 CARDS</span>
@@ -53,7 +75,33 @@
         <span>Make your first card above.</span>
       </div>
       <div class="card-list" aria-live="polite"></div>
+      </section>
     </section>
+    <dialog class="transfer-dialog" aria-labelledby="import-title">
+      <h2 id="import-title">IMPORT FLASHCARDS</h2>
+      <p>Paste one card per line using:</p>
+      <code>Title,Description</code>
+      <form class="import-form">
+        <label for="import-text">Flashcards</label>
+        <textarea id="import-text" rows="8" placeholder="Photosynthesis,Plants turn light into energy."></textarea>
+        <div class="transfer-actions">
+          <button class="editor-button cancel-import-button" type="button">CANCEL</button>
+          <button class="editor-button save-card-button" type="submit">IMPORT CARDS</button>
+        </div>
+        <p class="import-status" role="status" aria-live="polite"></p>
+      </form>
+    </dialog>
+    <dialog class="transfer-dialog export-dialog" aria-labelledby="export-title">
+      <div class="transfer-heading">
+        <h2 id="export-title">EXPORT FLASHCARDS</h2>
+        <button class="dialog-close-button close-export-button" type="button" aria-label="Close exported flashcards">×</button>
+      </div>
+      <p>Copy your cards in the saved format:</p>
+      <textarea class="export-text" aria-label="Exported flashcards" readonly></textarea>
+      <div class="export-actions">
+        <button class="editor-button copy-export-button" type="button">COPY</button>
+      </div>
+    </dialog>
   </main>
   <script type="module" src="flashcards.js"></script>
 </body>
