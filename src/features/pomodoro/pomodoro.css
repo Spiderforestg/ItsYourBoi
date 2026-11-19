@@ -12,7 +12,7 @@
 .widget button,
 .widget input { font: inherit; }
 
-body { margin: 0; background:#e8e2cd;width:322px;}
+body { margin: 0; background:#e8e2cd; min-width:300px;}
 
 .widget {
   --ink: #454b3f;

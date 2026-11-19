@@ -7,7 +7,7 @@ const playableGames = {
 };
 let selectedGame;
 
-// Add future games here; the list scrolls without moving the menu.
+// Add future games here; the picker grows with the list.
 const games = [
   { id: 'memory', name: 'Memory Match', symbol: '▦', description: 'Flip cards and find matching pairs. Train your memory with Boi!' },
   { id: 'snake', name: 'Snake', symbol: '▰', description: 'Collect snacks, grow your snake, and try to beat your best score.' },

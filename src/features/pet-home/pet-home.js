@@ -358,6 +358,20 @@ for (const swatches of swatchGroups) {
 document.querySelector('.dresser').addEventListener('click', () => palette.showModal());
 document.querySelector('.palette-close').addEventListener('click', () => palette.close());
 
+const radioButton = document.querySelector('.radio-button');
+const radioPlayer = document.querySelector('.radio-player');
+radioButton.addEventListener('click', () => {
+  radioPlayer.hidden = false;
+  if (!radioPlayer.hasAttribute('src')) radioPlayer.src = radioPlayer.dataset.src;
+  radioButton.setAttribute('aria-expanded', 'true');
+});
+window.addEventListener('message', event => {
+  if (event.source !== radioPlayer.contentWindow || event.data?.type !== 'radio:close') return;
+  radioPlayer.hidden = true;
+  radioButton.setAttribute('aria-expanded', 'false');
+  radioButton.focus();
+});
+
 async function restorePetColor() {
   const version = colorVersion;
   try {

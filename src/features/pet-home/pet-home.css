@@ -65,6 +65,14 @@ body { width: 100%; margin: 0; }
 .dresser-drawers::after { content: ""; position: absolute; top: 7px; left: 22px; width: 5px; height: 3px; background: #534e3c; box-shadow: 0 14px 0 #534e3c; }
 .dresser:hover .dresser-mirror { outline-color: #ad8138; }
 .dresser:focus-visible { outline: 2px dashed #287b88; outline-offset: 4px; }
+.radio-button { position: absolute; z-index: 1; bottom: 56px; left: calc(50% - 140px); display: grid; grid-template-columns: 1fr 12px; grid-template-rows: 10px 12px; align-content: center; gap: 2px; width: 50px; height: 38px; padding: 4px; border: 3px solid var(--ink); border-radius: 0; background: #d3a77e; box-shadow: 3px 3px 0 #87664f; color: inherit; cursor: pointer; }
+.radio-button::before { content: ""; position: absolute; top: -9px; left: 7px; width: 2px; height: 8px; background: var(--ink); transform: rotate(-35deg); transform-origin: bottom; }
+.radio-button:hover { background: #e0b98e; }
+.radio-button:focus-visible { outline: 2px dashed #287b88; outline-offset: 4px; }
+.radio-display { display: grid; place-items: center; grid-column: 1; grid-row: 1; border: 1px solid var(--ink); background: #9dcbd0; font-size: 8px; line-height: 1; }
+.radio-speaker { grid-column: 1; grid-row: 2; border: 1px solid var(--ink); background: repeating-linear-gradient(0deg, #454b3f 0 1px, #bc9470 1px 3px); }
+.radio-knob { align-self: center; justify-self: center; grid-column: 2; grid-row: 1 / span 2; width: 9px; height: 9px; border: 2px solid var(--ink); background: #e8e2cd; box-shadow: inset 1px 1px 0 #fff8e4; }
+.radio-player { position: absolute; z-index: 5; top: 12px; left: 12px; width: calc(100% - 24px); height: 160px; border: 3px solid var(--ink); box-shadow: 4px 4px 0 #877e65; background: #f9f5e7; }
 .color-palette { position: fixed; top: 16px; bottom: auto; left: 0; right: 0; width: 294px; max-width: calc(100vw - 24px); max-height: calc(100dvh - 32px); margin: 0 auto; padding: 14px; overflow: auto; border: 3px solid var(--ink); box-shadow: 4px 4px 0 #877e65; color: inherit; background: #f9f5e7; }
 .color-palette::backdrop { background: #252e3026; }
 .palette-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }

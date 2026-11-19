@@ -1,5 +1,11 @@
 # ItsYourBoi
-- A Study Extension for Chromium based browsers to help you focus, with a gamified feel.
+- A study extension for Chromium and Firefox to help you focus, with a gamified feel.
+
+## Lofi radio
+
+Open the radio beside Boi to play the bundled lofi tracks. Playback is owned by an
+extension background context, so closing the popup does not stop the music. Chromium
+uses an offscreen document; Firefox uses its background page.
 
 ## Pomodoro timer
 
@@ -22,7 +28,8 @@ focus sessions. Each next session waits for you to press Start.
 4. Open the extension, then **Pomodoro Timer**. Use **Open in tab** for a larger view.
 5. After pulling changes, click **Reload** on the extension card.
 
-The extension needs only `storage`, `alarms`, and `notifications` permissions.
+The extension uses `storage`, `alarms`, and `notifications`; Chromium also uses the
+`offscreen` permission to keep radio playback alive outside the popup.
 Timer state is stored in the browser's synced extension storage; existing local timer data is copied there the first time the updated extension runs.
 No host permissions, accounts, or build step are required. Browser/OS notification
 settings may suppress alerts. Alarms can arrive late during sleep or browser shutdown;
@@ -44,6 +51,10 @@ after a minute. Check that exactly one focus session is credited, the short brea
 is ready but paused, and a completion notification appears if notifications are allowed.
 Also check pause/resume, resetting, all session modes, task persistence, and a long
 break after four focus sessions.
+
+For radio playback, start a track, close the popup, then reopen it and confirm the
+track is still playing and the controls reflect its state. Check this in Chromium
+and Firefox.
 
 ## Helpful Resources
 

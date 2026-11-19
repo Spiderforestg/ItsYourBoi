@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "m5x7";
+  src: url("../../../assets/fonts/m5x7.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  color-scheme: light;
+  font-family: "m5x7", monospace;
+  font-size: 16px;
+  line-height: 1;
+  font-synthesis: none;
+  color: #343b36;
+  background: #f9f5e7;
+  --ink: #454b3f;
+}
+* { box-sizing: border-box; }
+body { min-width: 0; height: 100%; margin: 0; padding: 10px; }
+button, input { font: inherit; }
+.radio-menu { display: grid; gap: 12px; }
+.radio-heading { display: flex; align-items: center; gap: 8px; }
+.radio-heading-title { flex: 1; min-width: 0; }
+.radio-eyebrow { color: #686c58; font-size: 14px; }
+.radio-track { margin: 3px 0 0; font-size: 18px; font-weight: bold; overflow-wrap: anywhere; }
+.radio-menu button { border: 2px solid var(--ink); border-radius: 0; padding: 5px 8px; background: #f9f5e7; color: inherit; font: normal 16px "m5x7", monospace; cursor: pointer; box-shadow: 2px 2px 0 #b7ba9e; }
+.radio-menu button:hover { background: #f2e4b9; }
+.radio-menu button:focus-visible, .volume-control input:focus-visible { outline: 2px solid #287b88; outline-offset: 2px; }
+.radio-menu .radio-close { flex: 0 0 34px; width: 34px; height: 34px; padding: 0; font-size: 24px; line-height: 1; }
+.radio-controls { display: flex; align-items: center; gap: 8px; }
+.radio-menu .radio-play { flex: 1; min-height: 40px; background: #d7e6c7; }
+.radio-menu .radio-icon-button { position: relative; flex: 0 0 32px; width: 32px; height: 32px; min-height: 32px; padding: 0; display: grid; place-items: center; background: #f9f5e7; }
+.radio-previous::before, .radio-previous::after, .radio-skip::before, .radio-skip::after { content: ""; position: absolute; top: 50%; }
+.radio-previous::before { left: 8px; width: 2px; height: 14px; background: var(--ink); transform: translateY(-50%); }
+.radio-previous::after { left: 12px; border-top: 7px solid transparent; border-right: 9px solid var(--ink); border-bottom: 7px solid transparent; transform: translateY(-50%); }
+.radio-skip::before { right: 12px; border-top: 7px solid transparent; border-bottom: 7px solid transparent; border-left: 9px solid var(--ink); transform: translateY(-50%); }
+.radio-skip::after { right: 8px; width: 2px; height: 14px; background: var(--ink); transform: translateY(-50%); }
+.volume-control { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; font-size: 16px; }
+.volume-control input { width: 100%; margin: 0; accent-color: #627c4f; }
+.volume-value { min-width: 32px; text-align: right; }
+.radio-status { margin: 0; color: #8b3e31; }
+.radio-audio { display: none; }

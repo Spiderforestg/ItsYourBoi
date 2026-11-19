@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Boi — Radio</title>
+  <link rel="stylesheet" href="radio.css">
+  <script type="module" src="radio.js"></script>
+</head>
+<body>
+  <main class="radio-menu" aria-labelledby="radio-title">
+    <header class="radio-heading">
+      <div class="radio-heading-title">
+        <span class="radio-eyebrow">NOW PLAYING</span>
+        <h1 class="radio-track" id="radio-title" aria-live="polite">Loading track…</h1>
+      </div>
+      <button class="radio-close" type="button" aria-label="Close radio player" title="Close radio player">×</button>
+    </header>
+    <div class="radio-controls">
+      <button class="radio-previous radio-icon-button" type="button" aria-label="Previous track" title="Previous track"></button>
+      <button class="radio-play" type="button" aria-pressed="false">PLAY</button>
+      <button class="radio-skip radio-icon-button" type="button" aria-label="Next track" title="Next track"></button>
+    </div>
+    <label class="volume-control" for="radio-volume">
+      <span>VOLUME</span>
+      <input id="radio-volume" type="range" min="0" max="1" step="0.05" value="0.6">
+      <output class="volume-value" for="radio-volume">60%</output>
+    </label>
+    <p class="radio-status" role="status" hidden></p>
+    <audio class="radio-audio" preload="none"></audio>
+  </main>
+</body>
+</html>
