@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=350, initial-scale=1">
+  <title>Create Flashcards · It's Your Boi</title>
+  <link rel="stylesheet" href="../../pet-home/pet-home.css">
+  <link rel="stylesheet" href="flashcards.css">
+</head>
+<body>
+  <main class="flashcards-page">
+    <header class="page-heading">
+      <a class="back-link" href="../../pet-home/pet-home.html">← HOME</a>
+      <p class="eyebrow">STUDY TOOL</p>
+      <h1>FLASHCARDS</h1>
+      <p class="intro">Make a card to help something stick.</p>
+    </header>
+
+    <section class="card-panel" aria-labelledby="create-title">
+      <div class="panel-heading">
+        <span class="panel-icon" aria-hidden="true">✦</span>
+        <div>
+          <h2 id="create-title">CREATE A CARD</h2>
+          <p>Write a prompt and its answer.</p>
+        </div>
+      </div>
+
+      <form class="flashcard-form" action="#cards" method="get">
+        <div class="field-group">
+          <label for="card-title">Title</label>
+          <input id="card-title" name="title" type="text" placeholder="e.g. Photosynthesis" autocomplete="off" required>
+        </div>
+
+        <div class="field-group">
+          <label for="card-description">Description</label>
+          <textarea id="card-description" name="description" rows="5" placeholder="Add the definition, explanation, or answer..." required></textarea>
+          <p class="field-hint">Keep it short and easy to review.</p>
+        </div>
+
+        <button class="create-button" type="submit">CREATE FLASHCARD <span aria-hidden="true">→</span></button>
+        <p class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="cards-panel" id="cards" aria-labelledby="cards-title">
+      <div class="section-heading">
+        <h2 id="cards-title">YOUR CARDS</h2>
+        <span class="card-count">0 CARDS</span>
+      </div>
+      <div class="empty-state">
+        <span class="empty-symbol" aria-hidden="true">▱</span>
+        <p>Your deck is waiting.</p>
+        <span>Make your first card above.</span>
+      </div>
+      <div class="card-list" aria-live="polite"></div>
+    </section>
+  </main>
+  <script type="module" src="flashcards.js"></script>
+</body>
+</html>
