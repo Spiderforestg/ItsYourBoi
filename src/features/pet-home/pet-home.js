@@ -1,3 +1,4 @@
+import { SHOP_KEY, shopView } from '../shop/catalog.mjs';
 import { getRoomScene } from './room-scene.mjs';
 import { PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
 import { createPetMood, PET_LAST_SEEN_KEY, shouldPetSleep } from './pet-mood.mjs';
@@ -10,6 +11,7 @@ const xpCount = document.querySelector('.xp-count');
 const xpBar = document.querySelector('.xp-bar');
 const xpDetail = document.querySelector('.xp-detail');
 let progressState;
+let shopData;
 let prototypeXP = 0;
 let focusBaseline = 0;
 
@@ -44,6 +46,9 @@ function renderProgress(state, bonusXP = prototypeXP, baseline = focusBaseline) 
   xpBar.setAttribute('aria-valuetext', `Level ${level}, ${xp} of ${requiredXP} XP toward next level`);
   xpDetail.textContent = 'Completed focus: 1 min = 1 XP';
   xpBar.title = `Total: ${totalXP} XP`;
+  const { gold } = shopView(state?.focusMinutes, bonusXP, baseline, shopData);
+  document.querySelector('.coin-count').textContent = gold;
+  document.querySelector('.pet-wallet').setAttribute('aria-label', `Gold: ${gold}`);
 }
 
 async function refreshProgress() {
@@ -52,9 +57,11 @@ async function refreshProgress() {
       const response = await chrome.runtime.sendMessage({ target: 'pomodoro' });
       if (!response?.state || response.error) throw new Error('Timer unavailable');
       const saved = await chrome.storage.local.get([PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY]);
+      shopData = (await chrome.storage.sync.get(SHOP_KEY))[SHOP_KEY];
       renderProgress(response.state, saved[PET_BONUS_XP_KEY], saved[PET_XP_BASELINE_KEY]);
     } else {
       const saved = localStorage.getItem(KEY);
+      shopData = JSON.parse(localStorage.getItem(SHOP_KEY) ?? 'null');
       renderProgress(settle(saved ? JSON.parse(saved) : initialState()).state,
         Number(localStorage.getItem(PET_BONUS_XP_KEY)), Number(localStorage.getItem(PET_XP_BASELINE_KEY)));
     }
@@ -65,15 +72,14 @@ async function refreshProgress() {
 
 if (extension) {
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'local' && (changes[KEY] || changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY])) {
-      renderProgress(changes[KEY] ? changes[KEY].newValue : progressState,
-        changes[PET_BONUS_XP_KEY] ? changes[PET_BONUS_XP_KEY].newValue : prototypeXP,
-        changes[PET_XP_BASELINE_KEY] ? changes[PET_XP_BASELINE_KEY].newValue : focusBaseline);
+    if ((area === 'sync' && (changes[KEY] || changes[SHOP_KEY])) ||
+        (area === 'local' && (changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY]))) {
+      refreshProgress();
     }
   });
 } else {
   window.addEventListener('storage', event => {
-    if ([KEY, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY, null].includes(event.key)) refreshProgress();
+    if ([KEY, SHOP_KEY, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY, null].includes(event.key)) refreshProgress();
   });
 }
 refreshProgress();

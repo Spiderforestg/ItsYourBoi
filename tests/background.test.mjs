@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { SHOP_KEY } from '../src/features/shop/catalog.mjs';
 import { KEY, initialState } from '../src/features/pomodoro/timer.mjs';
 
 test('worker restores an expired session once, persists actions, and serializes messages', async () => {
@@ -48,5 +49,20 @@ test('worker restores an expired session once, persists actions, and serializes 
   listeners.storageChanged({ [KEY]: { newValue: syncSaved[KEY] } }, 'sync');
   await send();
   assert.equal(alarms.get('boi-session-end').when, syncSaved[KEY].endAt);
+  const shop = (action = 'read', itemId) => new Promise(resolve => listeners.message({ target: 'shop', action, itemId }, { id: 'test' }, resolve));
+  syncSaved[KEY] = { ...initialState(), focusMinutes: 40 };
+  assert.equal((await shop()).shop.gold, 40);
+  const purchases = await Promise.all([shop('buy', 'cap'), shop('buy', 'cap')]);
+  assert.equal(purchases.filter(result => result.shop).length, 1);
+  assert.equal(syncSaved[SHOP_KEY].inventory.cap, 1);
+  assert.equal((await shop()).shop.gold, 10);
+  const snacks = await Promise.all([shop('buy', 'apple'), shop('buy', 'apple'), shop('buy', 'apple')]);
+  assert.equal(snacks.filter(result => result.shop).length, 2);
+  assert.equal(syncSaved[SHOP_KEY].inventory.apple, 2);
+  assert.equal((await shop()).shop.gold, 0);
+  assert.match((await shop('buy', 'wizard')).error, /level 4/);
+  syncSaved[KEY].focusMinutes = 100;
+  assert.equal((await shop()).shop.gold, 60);
+  assert.equal((await shop()).shop.level, 2);
   delete globalThis.chrome;
 });

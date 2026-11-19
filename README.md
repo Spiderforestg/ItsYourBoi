@@ -56,3 +56,16 @@ break after four focus sessions.
 [Adding an HTML class to an HTML element with JavaScript](https://www.w3schools.com/howto/howto_js_add_class.asp)
 
 [Retrieve values from all types of HTML inputs in JavaScript](https://dev.to/milliemolotov/how-to-retrieve-values-from-all-types-of-html-inputs-in-javascript-3143)
+## Shop
+
+Open **SHOP** from Pet Home to browse clothes, food, and hats. Scroll within the
+item list or use the category filters. Completed focus earns **1 gold per minute**;
+existing completed focus minutes count too. Test XP changes pet level but earns no
+gold. Each item shows its price and required level. Purchases deduct gold and save
+to your bag; clothes and hats can be owned once, while food can be bought repeatedly.
+Feeding and equipping items are not implemented yet.
+
+Gold balance and purchases use synced extension storage, with pet level based on
+the existing XP system. The web preview stores purchases in this browser and uses
+Web Locks to serialize purchases between tabs. After updating the extension,
+reload it from the extensions page so the shop's purchase handler is available.
