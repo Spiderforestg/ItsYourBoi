@@ -12,6 +12,7 @@ const activeSetName = document.querySelector('.active-set-name');
 const changeSetButton = document.querySelector('.back-to-sets');
 const importButton = document.querySelector('[data-action="import"]');
 const exportButton = document.querySelector('[data-action="export"]');
+const studyButton = document.querySelector('[data-action="study"]');
 const transferDialog = document.querySelector('.transfer-dialog');
 const importForm = document.querySelector('.import-form');
 const importText = document.querySelector('#import-text');
@@ -20,6 +21,15 @@ const cancelImportButton = document.querySelector('.cancel-import-button');
 const exportDialog = document.querySelector('.export-dialog');
 const exportText = document.querySelector('.export-text');
 const closeExportButton = document.querySelector('.close-export-button');
+const studyDialog = document.querySelector('.study-dialog');
+const studyCard = document.querySelector('.study-card');
+const studyFront = document.querySelector('.study-card-front');
+const studyBack = document.querySelector('.study-card-back');
+const studyProgress = document.querySelector('.study-progress');
+const studySideIndicator = document.querySelector('.study-side-indicator');
+const previousCardButton = document.querySelector('.previous-card-button');
+const nextCardButton = document.querySelector('.next-card-button');
+const closeStudyButton = document.querySelector('.close-study-button');
 const copyExportButton = document.querySelector('.copy-export-button');
 const form = document.querySelector('.flashcard-form');
 const titleInput = document.querySelector('#card-title');
@@ -33,6 +43,7 @@ const emptyState = document.querySelector('.empty-state');
 let sets = [];
 let currentSet = null;
 let cards = [];
+let studyIndex = 0;
 
 function createCard(title, description) {
   return {
@@ -235,6 +246,54 @@ copyExportButton.addEventListener('click', async () => {
   copyExportButton.textContent = 'COPIED';
   setTimeout(() => { copyExportButton.textContent = 'COPY'; }, 1200);
 });
+
+function renderStudyCard() {
+  if (!cards.length) {
+    studyFront.textContent = 'NO CARDS YET';
+    studyBack.textContent = 'Create a card to start studying.';
+    studyProgress.textContent = '0 CARDS';
+    studySideIndicator.textContent = 'TITLE';
+    previousCardButton.disabled = true;
+    nextCardButton.disabled = true;
+    return;
+  }
+
+  const card = cards[studyIndex];
+  studyFront.textContent = card.title;
+  studyBack.textContent = card.description;
+  studyProgress.textContent = `CARD ${studyIndex + 1} OF ${cards.length}`;
+  studySideIndicator.textContent = 'TITLE';
+  studyCard.classList.remove('is-flipped');
+  previousCardButton.disabled = cards.length < 2;
+  nextCardButton.disabled = cards.length < 2;
+}
+
+studyButton.addEventListener('click', () => {
+  studyIndex = 0;
+  renderStudyCard();
+  studyDialog.showModal();
+});
+
+studyCard.addEventListener('click', () => {
+  if (cards.length) {
+    const flipped = studyCard.classList.toggle('is-flipped');
+    studySideIndicator.textContent = flipped ? 'DESCRIPTION' : 'TITLE';
+  }
+});
+
+previousCardButton.addEventListener('click', () => {
+  if (!cards.length) return;
+  studyIndex = (studyIndex - 1 + cards.length) % cards.length;
+  renderStudyCard();
+});
+
+nextCardButton.addEventListener('click', () => {
+  if (!cards.length) return;
+  studyIndex = (studyIndex + 1) % cards.length;
+  renderStudyCard();
+});
+
+closeStudyButton.addEventListener('click', () => studyDialog.close());
 
 function renderCards() {
   cardList.replaceChildren();

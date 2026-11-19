@@ -273,6 +273,129 @@ body {
   margin-top: 8px;
 }
 
+.study-dialog {
+  width: 294px;
+  max-width: calc(100% - 28px);
+  padding: 16px;
+  border: 3px solid var(--ink);
+  box-shadow: 4px 4px 0 #877e65;
+  color: inherit;
+  background: #f9f5e7;
+}
+
+.study-dialog::backdrop {
+  background: #252e3066;
+}
+
+.study-dialog h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.study-progress {
+  width: fit-content;
+  padding: 5px 9px;
+  margin: 1px auto 10px;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 #c5bea8;
+  background: #e8e2cd;
+  color: #343b36;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.study-side-indicator {
+  margin: 0 0 6px;
+  color: #627c4f;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.study-card {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 240px;
+  padding: 22px;
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 #c5bea8;
+  background: #fffdf5;
+  color: inherit;
+  cursor: pointer;
+  perspective: 800px;
+}
+
+.study-card:hover {
+  background: #f2e4b9;
+}
+
+.study-card:focus-visible,
+.study-arrow:focus-visible {
+  outline: 3px solid #287b88;
+  outline-offset: 3px;
+}
+
+.study-card-face {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  color: #343b36;
+  font-size: 31px;
+  font-weight: bold;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.study-card-back {
+  color: #686c58;
+  font-size: 24px;
+  font-weight: normal;
+  line-height: 1.25;
+  opacity: 0;
+  transform: rotateY(90deg);
+}
+
+.study-card.is-flipped .study-card-front {
+  opacity: 0;
+  transform: rotateY(-90deg);
+}
+
+.study-card.is-flipped .study-card-back {
+  opacity: 1;
+  transform: rotateY(0);
+}
+
+.study-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.study-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 34px;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: #e8e2cd;
+  color: inherit;
+  font: 24px/1 "m5x7", monospace;
+  cursor: pointer;
+}
+
+.study-arrow:hover {
+  background: #f2e4b9;
+}
+
 .page-heading {
   padding: 2px 2px 14px;
 }
