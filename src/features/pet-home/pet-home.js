@@ -1,6 +1,7 @@
 import { SHOP_KEY, shopView } from '../shop/catalog.mjs';
+import { drawOwlPose, owlSpriteUrl, startOwlIdle } from './pet-art.mjs';
 import { getRoomScene } from './room-scene.mjs';
-import { PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
+import { DEFAULT_PET_COLOR, DEFAULT_PET_SECONDARY_COLOR, PET_COLOR_KEY, PET_SECONDARY_COLOR_KEY, PET_COLORS, recolorPetPixels } from './pet-appearance.mjs';
 import { createPetMood, PET_LAST_SEEN_KEY, shouldPetSleep } from './pet-mood.mjs';
 import { KEY, initialState, settle } from '../pomodoro/timer.mjs';
 import { getPetProgress, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY } from './pet-progress.mjs';
@@ -162,133 +163,40 @@ document.addEventListener('visibilitychange', () => {
 const pet = document.querySelector('.pet');
 const context = pet.getContext('2d');
 const sprite = new Image();
-let neutralFrame;
-let originalFrame;
-let selectedColor = 'blue';
-let selectedSecondaryColor = 'gold';
+let spriteReady = false;
+let selectedColor = DEFAULT_PET_COLOR;
+let selectedSecondaryColor = DEFAULT_PET_SECONDARY_COLOR;
 let currentExpression = 'neutral';
+let idleFrame;
 
 function drawExpression(expression) {
   currentExpression = expression;
-  if (!neutralFrame) return;
-  context.putImageData(neutralFrame, 0, 0);
-  if (expression === 'neutral') return;
+  if (!spriteReady) return;
 
-  // Replace only the eye pixels, using the original skin color on each row.
-  // The body, outline and palette remain from the original sprite.
-  function clearEye(x) {
-    for (let y = 8; y <= 13; y++) {
-      const offset = (y * pet.width + 11) * 4;
-      const [r, g, b] = neutralFrame.data.slice(offset, offset + 3);
-      context.fillStyle = `rgb(${r}, ${g}, ${b})`;
-      context.fillRect(x, y, 4, 1);
-    }
-  }
-
-  function smilingEye(x) {
-    context.fillStyle = '#28515d';
-    context.fillRect(x, 10, 1, 1);
-    context.fillRect(x + 1, 9, 2, 1);
-    context.fillRect(x + 3, 10, 1, 1);
-  }
-
-  if (expression === 'happy' || expression === 'wink') {
-    clearEye(6);
-    smilingEye(6);
-    if (expression === 'happy') {
-      clearEye(13);
-      smilingEye(13);
-    }
-    context.fillStyle = '#28515d';
-    context.fillRect(10, 14, 3, 1);
-    context.fillRect(11, 15, 1, 1);
-    context.fillStyle = '#ef9eaa';
-    context.fillRect(4, 13, 2, 1);
-    context.fillRect(17, 13, 2, 1);
-  } else if (expression === 'sleeping') {
-    clearEye(6);
-    clearEye(13);
-    context.fillStyle = '#28515d';
-    context.fillRect(6, 11, 4, 1);
-    context.fillRect(13, 11, 4, 1);
-    context.fillRect(10, 15, 2, 1);
-  } else if (expression === 'grumpy') {
-    clearEye(6);
-    clearEye(13);
-    context.fillStyle = '#28515d';
-    // Inward-slanting brows, narrowed eyes and a small frown.
-    for (let i = 0; i < 4; i++) {
-      context.fillRect(6 + i, 8 + Math.floor(i / 2), 1, 1);
-      context.fillRect(13 + i, 9 - Math.floor(i / 2), 1, 1);
-    }
-    context.fillRect(7, 12, 2, 1);
-    context.fillRect(14, 12, 2, 1);
-    context.fillRect(10, 15, 1, 1);
-    context.fillRect(11, 14, 1, 1);
-    context.fillRect(12, 15, 1, 1);
-  } else if (expression === 'surprised') {
-    context.fillStyle = '#28515d';
-    context.fillRect(7, 10, 1, 2);
-    context.fillRect(14, 10, 1, 2);
-    context.fillRect(10, 14, 3, 2);
-    context.fillStyle = '#ef9eaa';
-    context.fillRect(11, 15, 1, 1);
-  }
+  drawOwlPose(context, sprite, expression, idleFrame);
+  if (selectedColor === DEFAULT_PET_COLOR && selectedSecondaryColor === DEFAULT_PET_SECONDARY_COLOR) return;
+  const frame = context.getImageData(0, 0, pet.width, pet.height);
+  frame.data.set(recolorPetPixels(frame.data, selectedColor, selectedSecondaryColor));
+  context.putImageData(frame, 0, 0);
 }
 
 sprite.addEventListener('load', () => {
-  // Draw the neutral pose at its original resolution; CSS enlarges the pixels.
-  context.drawImage(sprite, 0, 21, 22, 25, 0, 0, 22, 25);
-  const frame = context.getImageData(0, 0, pet.width, pet.height);
-  const { data, width, height } = frame;
-  const visited = new Uint8Array(width * height);
-  const pending = [];
-
-  // Remove only white pixels connected to the crop's edge. Enclosed whites
-  // (such as eyes) and all character colors keep their original values.
-  for (let x = 0; x < width; x++) {
-    pending.push(x, (height - 1) * width + x);
-  }
-  for (let y = 0; y < height; y++) {
-    pending.push(y * width, y * width + width - 1);
-  }
-
-  while (pending.length) {
-    const pixel = pending.pop();
-    if (visited[pixel]) continue;
-    visited[pixel] = 1;
-    const offset = pixel * 4;
-    const transparent = data[offset + 3] === 0;
-    const white = data[offset] === 255
-      && data[offset + 1] === 255 && data[offset + 2] === 255;
-    if (!transparent && !white) continue;
-
-    data[offset + 3] = 0;
-    const x = pixel % width;
-    const y = Math.floor(pixel / width);
-    if (x > 0) pending.push(pixel - 1);
-    if (x < width - 1) pending.push(pixel + 1);
-    if (y > 0) pending.push(pixel - width);
-    if (y < height - 1) pending.push(pixel + width);
-  }
-
-  originalFrame = frame;
-  applyPetColor(selectedColor);
+  spriteReady = true;
+  drawExpression(currentExpression);
+  startOwlIdle(frame => {
+    idleFrame = frame;
+    drawExpression('neutral');
+  }, () => currentExpression === 'neutral');
 });
 sprite.addEventListener('error', () => {
   xpDetail.textContent = "Could not load Boi's image. Update and reload the extension.";
 });
-sprite.src = new URL('../../assets/pets/placeholder-sprite-sheet.png', import.meta.url).href;
+sprite.src = owlSpriteUrl;
 
 function applyPetColor(colorId, secondaryId = selectedSecondaryColor) {
-  selectedColor = PET_COLORS.some(color => color.id === colorId) ? colorId : 'blue';
-  selectedSecondaryColor = PET_COLORS.some(color => color.id === secondaryId) ? secondaryId : 'gold';
-  if (originalFrame) {
-    neutralFrame = new ImageData(
-      recolorPetPixels(originalFrame.data, selectedColor, selectedSecondaryColor), originalFrame.width, originalFrame.height,
-    );
-    drawExpression(currentExpression);
-  }
+  selectedColor = PET_COLORS.some(color => color.id === colorId) ? colorId : DEFAULT_PET_COLOR;
+  selectedSecondaryColor = PET_COLORS.some(color => color.id === secondaryId) ? secondaryId : DEFAULT_PET_SECONDARY_COLOR;
+  drawExpression(currentExpression);
   for (const swatch of document.querySelectorAll('.color-swatch')) {
     const selected = swatch.dataset.region === 'primary' ? selectedColor : selectedSecondaryColor;
     swatch.setAttribute('aria-pressed', String(swatch.dataset.color === selected));

@@ -19,7 +19,8 @@
 button, input, select, textarea { font-family: inherit; }
 /* Give Chrome's popup autosizing a width independent of its initial viewport. */
 html { width: 350px; min-width: 350px; }
-body { width: 100%; margin: 0; }
+/* Chrome's extension stylesheet sets a default font directly on body. */
+body { width: 100%; margin: 0; font: inherit; }
 .home { padding: 4px 14px 14px; display: flex; flex-direction: column; }
 .pet-room { height: 367px; display: flex; flex-direction: column; border: 3px solid var(--ink); border-bottom: 0; box-shadow: 4px 4px 0 #c5bea8; }
 .pet-stage { flex: 1; min-height: 0; position: relative; height: 262px; overflow: hidden; isolation: isolate; background: repeating-linear-gradient(90deg, transparent 0 38px, #d0dbc5 38px 40px), #e0e7cf; }
@@ -97,11 +98,9 @@ body { width: 100%; margin: 0; }
 .pet { display: block; width: 88px; height: 100px;
   image-rendering: pixelated;
   transform-origin: center bottom;
-  animation: pet-breathe 2.8s ease-in-out infinite;
 }
-.pet-interact[data-reaction] .pet { animation-play-state: paused; }
 .pet-interact[data-sleeping="true"] { transform: rotate(-6deg); }
-.pet-interact[data-sleeping="true"] .pet { animation-duration: 5s; }
+.pet-interact[data-sleeping="true"] .pet { animation: pet-breathe 5s ease-in-out infinite; }
 .pet-interact[data-reaction="hop"] { animation: pet-hop 700ms ease-in-out both; }
 .pet-interact[data-reaction="wiggle"] { animation: pet-wiggle 700ms ease-in-out both; }
 .pet-interact[data-reaction="happy"] { animation: pet-hop 350ms ease-in-out 2 both; }
@@ -175,5 +174,5 @@ body { width: 100%; margin: 0; }
 .dress-icon::after { content: ""; position: absolute; inset: 7px 8px 4px; background: #a8bbcd; }
 a:focus-visible { outline: 3px solid #287b88; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .pet, .pet-interact[data-reaction] { animation: none; }
+  .pet-interact[data-sleeping="true"] .pet, .pet-interact[data-reaction] { animation: none; }
 }
