@@ -7,17 +7,22 @@ import { saveArrayToLocalStorage, loadArrayFromLocalStorage } from '../../utils/
 // Import error handler util
 import { logError } from '../../utils/errors.js';
 
+// Import Sanitizer for User Input
+import { sanitizeUserInput } from '../../utils/userInput.js';
+
 // Create an array to hold the To-do items
 const todoArray = [];
 
 try {
     loadArrayFromLocalStorage("todoList").forEach(element => {
+        const id = `todo-${todoArray.indexOf(element)}`;
         // Push only objects of class "todoItem" into the array
-        const newTodoItem = new todoItem(element.name, element.difficulty);
+        const newTodoItem = new todoItem(id, element.name, element.difficulty);
         todoArray.push(newTodoItem);
     });
 }
 catch (err) {
+    console.log(err);
     console.log("Todo List is empty");
 }
 
@@ -55,6 +60,7 @@ displayTodoList();
 function addItem(event) {
     // Get values from form
     try {
+        const id = `todo-${todoArray.length}`;
         const nameValue = document.getElementById('name').value;
         const radioValue = document.querySelector('input[name="difficulty"]:checked')?.value || null;
         
@@ -70,7 +76,7 @@ function addItem(event) {
         clearErrorMessage('form-error');
 
         // Push a new todoItem to the array and save it to localStorage
-        const newTodoItem = new todoItem(nameValue, radioValue);
+        const newTodoItem = new todoItem(id, nameValue, radioValue);
         todoArray.push(newTodoItem);
 
         debugLogConsole(todoArray);
@@ -119,43 +125,44 @@ function displayTodoList() {
 
     todoTableElement.innerHTML = `
     <tr class="todo-row">
-      <td class="todo-header" class="todo-completed">Completed</td>
-      <td class="todo-header" class="todo-name">Name</td>
-      <td class="todo-header" class="todo-difficulty">Difficulty</td>
+      <td class="todo-header" "todo-completed">Completed</td>
+      <td class="todo-header" "todo-name">Name</td>
+      <td class="todo-header" "todo-difficulty">Difficulty</td>
     </tr>
     `
     // Loop through the To-do list array and add it to the HTML
-    todoArray.forEach(item => {
-        const todoItemElement = document.createElement('tr');
-        todoItemElement.classList.add('todo-row');
+    todoArray.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.className = 'todo-row';
 
-        // Draws a line through items that are completed
+        const completedCell = document.createElement('td');
+        completedCell.className = 'todo-completed';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'todo-item-checkbox';
+        checkbox.id = `todo-${index}`;
+        checkbox.checked = Boolean(item.completed);
+
+        initializeCheckbox(checkbox);
+
+        completedCell.appendChild(checkbox);
+
+        const nameCell = document.createElement('td');
+        nameCell.className = 'todo-name';
+        nameCell.textContent = item.name; // Safely rendered as text
+
+        const difficultyCell = document.createElement('td');
+        difficultyCell.className = 'todo-difficulty';
+        difficultyCell.textContent = item.difficulty; // Safely rendered as text
+
+        row.append(completedCell, nameCell, difficultyCell);
+
         if (item.completed) {
-            todoItemElement.classList.add('completed-row');
+            row.classList.add('completed-row');
         }
-        
-        let htmlString = `
-            <td class="todo-completed">
-            `
-        if (item.completed) {
-            htmlString += `Yes</td>`;
-        }
-        else htmlString += `No</td>`;
 
-        htmlString +=`
-            <td class="todo-name">
-                ${item.name}
-            </td>
-            <td class="todo-difficulty">
-                ${item.difficulty}
-            </td>
-        `;
-
-        debugLogConsole(htmlString);
-        
-        todoItemElement.innerHTML = htmlString;
-
-        todoTableElement.appendChild(todoItemElement);
+        todoTableElement.appendChild(row);
     });
 }
 
@@ -200,6 +207,23 @@ function clearButtonsBackground() {
         button.style.backgroundColor = "initial";
     });
 }
+
+/**
+ * INITIALIZE CHECKBOX
+ * Adds event listener to the checkbox to update completion status of todo item
+ */
+function initializeCheckbox(checkbox, checked=false) {
+    debugLogConsole(checkbox);
+
+    checkbox.addEventListener('change', handleCheckboxChange);
+}
+function handleCheckboxChange(event) {
+    const checkbox = event.target;
+    const isChecked = checkbox.checked;
+
+
+}
+
 
 // DEBUG TESTS
 
