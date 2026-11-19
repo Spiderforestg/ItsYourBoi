@@ -30,3 +30,12 @@ export function purchaseItem(id, focusMinutes, bonusXP, baseline, saved) {
   if (view.gold < item.price) throw new Error('Not enough gold. Complete a focus session to earn more.');
   return { spent: view.spent + item.price, inventory: { ...view.inventory, [id]: view.inventory[id] + 1 } };
 }
+
+export function consumeFood(id, saved) {
+  const item = ITEMS.find(item => item.id === id && item.category === 'food');
+  if (!item) throw new Error('Only food can be fed to your pet.');
+  const shop = normalizeShop(saved);
+  if (!shop.inventory[id]) throw new Error(`You’re out of ${item.name.toLowerCase()}.`);
+  shop.inventory[id]--;
+  return shop;
+}

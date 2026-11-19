@@ -1,4 +1,4 @@
-import { SHOP_KEY, shopView, purchaseItem } from '../shop/catalog.mjs';
+import { SHOP_KEY, shopView, purchaseItem, consumeFood } from '../shop/catalog.mjs';
 import { PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY } from '../pet-home/pet-progress.mjs';
 import { KEY, MODES, initialState, settle, transition } from '../pomodoro/timer.mjs';
 
@@ -36,22 +36,30 @@ async function update(action) {
   return state;
 }
 async function updateShop(message) {
-  if (!['read', 'buy'].includes(message.action)) throw new Error('Unknown shop action.');
+  if (!['read', 'buy', 'feed'].includes(message.action)) throw new Error('Unknown shop action.');
   const timer = settle(await loadState()).state;
-  const synced = await chrome.storage.sync.get(SHOP_KEY);
-  const local = await chrome.storage.local.get([PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY]);
+  const local = await chrome.storage.local.get([SHOP_KEY, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY]);
   const bonus = local[PET_BONUS_XP_KEY];
   const baseline = local[PET_XP_BASELINE_KEY];
-  let saved = synced[SHOP_KEY];
+  let saved = local[SHOP_KEY];
+  const needsMigration = saved === undefined;
+  if (needsMigration) {
+    // Copy the old synced bag on first use. Later changes are local to this device.
+    saved = (await chrome.storage.sync.get(SHOP_KEY))[SHOP_KEY];
+  }
   if (message.action === 'buy') {
     saved = purchaseItem(message.itemId, timer.focusMinutes, bonus, baseline, saved);
-    await chrome.storage.sync.set({ [SHOP_KEY]: saved });
+  } else if (message.action === 'feed') {
+    saved = consumeFood(message.itemId, saved);
+  }
+  if (message.action !== 'read' || (needsMigration && saved !== undefined)) {
+    await chrome.storage.local.set({ [SHOP_KEY]: saved });
   }
   return shopView(timer.focusMinutes, bonus, baseline, saved);
 }
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
   if (sender.id !== chrome.runtime.id) return;
-  // Both routes share one queue, so a purchase always validates the latest balance.
+  // Both routes share one queue so purchases and feed actions see the latest bag.
   if (message?.target === 'pomodoro') {
     enqueue(() => update(message.action)).then(state => respond({ state }), error => respond({ error: error.message }));
   } else if (message?.target === 'shop') {

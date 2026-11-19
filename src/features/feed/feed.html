@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Boi — Feed</title>
+  <link rel="stylesheet" href="../pet-home/pet-home.css">
+  <link rel="stylesheet" href="feed.css">
+  <script type="module" src="feed.js"></script>
+</head>
+<body>
+  <main class="home feed-home">
+    <section class="pet-room" aria-labelledby="feed-title">
+      <header class="feed-heading">
+        <h1 id="feed-title">Feed <span id="feed-pet-name">Boi</span></h1>
+        <p id="feed-help">Drag food onto your owl, or select food and then the owl.</p>
+      </header>
+      <div class="pet-stage">
+        <div class="window" aria-hidden="true">
+          <span class="celestial"></span><span class="stars"></span>
+          <span class="cloud"></span><span class="landscape"></span>
+        </div>
+        <div class="floor" aria-hidden="true"></div>
+        <div class="rug" aria-hidden="true"></div>
+        <div class="pet-shadow" aria-hidden="true"></div>
+        <button class="pet-interact" id="feed-target" type="button" aria-label="Feed Boi" aria-describedby="feed-help">
+          <canvas class="pet" width="22" height="25" aria-hidden="true"></canvas>
+        </button>
+      </div>
+      <section class="feed-bag" aria-labelledby="bag-title">
+        <h2 id="bag-title">Food bag</h2>
+        <ul id="feed-items" class="feed-items"></ul>
+        <div id="feed-empty" hidden>
+          <p>Your bag is empty.</p>
+          <a class="feed-shop-link" href="../shop/shop.html">Visit the Shop</a>
+        </div>
+        <p id="feed-status" role="status">Loading your food…</p>
+      </section>
+    </section>
+    <nav class="menus home-menus" aria-label="Main navigation">
+      <a href="../pet-home/pet-home.html"><span class="menu-icon home-icon" aria-hidden="true"></span><span>HOME</span></a>
+      <a href="../../pomodoro.html"><span class="menu-icon clock-icon" aria-hidden="true"></span><span>FOCUS</span></a>
+      <a href="../../todo.html"><span class="menu-icon task-icon" aria-hidden="true"></span><span>TASKS</span></a>
+      <a href="../shop/shop.html"><span class="menu-icon shop-icon" aria-hidden="true"></span><span>SHOP</span></a>
+      <a href="feed.html" aria-current="page"><span class="menu-icon food-icon" aria-hidden="true"></span><span>FEED</span></a>
+      <button type="button" disabled aria-label="Dress up (coming soon)"><span class="menu-icon dress-icon" aria-hidden="true"></span><span>DRESS</span></button>
+      <a href="../fun-things/fun-things.html"><span class="menu-icon fun-icon" aria-hidden="true"></span><span class="fun-label">FUN<br>THINGS</span></a>
+      <a href="../../../index.html"><span class="menu-icon start-icon" aria-hidden="true">←</span><span>START</span></a>
+    </nav>
+  </main>
+</body>
+</html>

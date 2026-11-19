@@ -23,8 +23,10 @@ const petButton = document.querySelector('.pet-interact');
 
 async function loadPetName() {
   try {
-    const saved = await chrome.storage.sync.get('petName');
-    petName = saved.petName || 'Boi';
+    const savedName = extension
+      ? (await chrome.storage.sync.get('petName')).petName
+      : localStorage.getItem('petName');
+    petName = savedName || 'Boi';
     petNameElement.textContent = petName;
     petButton.setAttribute('aria-label', `Play with ${petName}`);
     petButton.title = `Click to play with ${petName}`;
@@ -45,7 +47,7 @@ function renderProgress(state, bonusXP = prototypeXP, baseline = focusBaseline) 
   xpBar.max = requiredXP;
   xpBar.value = xp;
   xpBar.setAttribute('aria-valuetext', `Level ${level}, ${xp} of ${requiredXP} XP toward next level`);
-  xpDetail.textContent = 'Completed focus: 1 min = 1 XP';
+  xpDetail.textContent = '';
   xpBar.title = `Total: ${totalXP} XP`;
   const { gold } = shopView(state?.focusMinutes, bonusXP, baseline, shopData);
   document.querySelector('.coin-count').textContent = gold;
@@ -57,8 +59,8 @@ async function refreshProgress() {
     if (extension) {
       const response = await chrome.runtime.sendMessage({ target: 'pomodoro' });
       if (!response?.state || response.error) throw new Error('Timer unavailable');
-      const saved = await chrome.storage.local.get([PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY]);
-      shopData = (await chrome.storage.sync.get(SHOP_KEY))[SHOP_KEY];
+      const saved = await chrome.storage.local.get([SHOP_KEY, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY]);
+      shopData = saved[SHOP_KEY] ?? (await chrome.storage.sync.get(SHOP_KEY))[SHOP_KEY];
       renderProgress(response.state, saved[PET_BONUS_XP_KEY], saved[PET_XP_BASELINE_KEY]);
     } else {
       const saved = localStorage.getItem(KEY);
@@ -74,7 +76,7 @@ async function refreshProgress() {
 if (extension) {
   chrome.storage.onChanged.addListener((changes, area) => {
     if ((area === 'sync' && (changes[KEY] || changes[SHOP_KEY])) ||
-        (area === 'local' && (changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY]))) {
+        (area === 'local' && (changes[SHOP_KEY] || changes[PET_BONUS_XP_KEY] || changes[PET_XP_BASELINE_KEY]))) {
       refreshProgress();
     }
   });

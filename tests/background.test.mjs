@@ -12,7 +12,10 @@ test('worker restores an expired session once, persists actions, and serializes 
   globalThis.chrome = {
     storage: {
       onChanged: event('storageChanged'),
-      local: { async get() { return structuredClone(localSaved); } },
+      local: {
+        async get() { return structuredClone(localSaved); },
+        async set(value) { Object.assign(localSaved, structuredClone(value)); }
+      },
       sync: {
         async get() { return structuredClone(syncSaved); },
         async set(value) { Object.assign(syncSaved, structuredClone(value)); }
@@ -50,19 +53,29 @@ test('worker restores an expired session once, persists actions, and serializes 
   await send();
   assert.equal(alarms.get('boi-session-end').when, syncSaved[KEY].endAt);
   const shop = (action = 'read', itemId) => new Promise(resolve => listeners.message({ target: 'shop', action, itemId }, { id: 'test' }, resolve));
-  syncSaved[KEY] = { ...initialState(), focusMinutes: 40 };
+  syncSaved[KEY] = { ...initialState(), focusMinutes: 45 };
+  const legacyShop = { spent: 5, inventory: { apple: 1 } };
+  syncSaved[SHOP_KEY] = structuredClone(legacyShop);
   assert.equal((await shop()).shop.gold, 40);
+  assert.deepEqual(localSaved[SHOP_KEY], legacyShop);
   const purchases = await Promise.all([shop('buy', 'cap'), shop('buy', 'cap')]);
   assert.equal(purchases.filter(result => result.shop).length, 1);
-  assert.equal(syncSaved[SHOP_KEY].inventory.cap, 1);
+  assert.equal(localSaved[SHOP_KEY].inventory.cap, 1);
   assert.equal((await shop()).shop.gold, 10);
   const snacks = await Promise.all([shop('buy', 'apple'), shop('buy', 'apple'), shop('buy', 'apple')]);
   assert.equal(snacks.filter(result => result.shop).length, 2);
-  assert.equal(syncSaved[SHOP_KEY].inventory.apple, 2);
+  assert.equal(localSaved[SHOP_KEY].inventory.apple, 3);
   assert.equal((await shop()).shop.gold, 0);
+  assert.match((await shop('feed', 'cap')).error, /Only food/);
+  const feedAttempts = await Promise.all(Array.from({ length: 4 }, () => shop('feed', 'apple')));
+  assert.equal(feedAttempts.filter(result => result.shop).length, 3);
+  assert.equal(localSaved[SHOP_KEY].inventory.apple, 0);
+  assert.equal(localSaved[SHOP_KEY].inventory.cap, 1);
+  assert.equal((await shop()).shop.gold, 0);
+  assert.deepEqual(syncSaved[SHOP_KEY], legacyShop);
   assert.match((await shop('buy', 'wizard')).error, /level 4/);
   syncSaved[KEY].focusMinutes = 100;
-  assert.equal((await shop()).shop.gold, 60);
+  assert.equal((await shop()).shop.gold, 55);
   assert.equal((await shop()).shop.level, 2);
   delete globalThis.chrome;
 });

@@ -63,9 +63,11 @@ item list or use the category filters. Completed focus earns **1 gold per minute
 existing completed focus minutes count too. Test XP changes pet level but earns no
 gold. Each item shows its price and required level. Purchases deduct gold and save
 to your bag; clothes and hats can be owned once, while food can be bought repeatedly.
-Feeding and equipping items are not implemented yet.
 
-Gold balance and purchases use synced extension storage, with pet level based on
-the existing XP system. The web preview stores purchases in this browser and uses
-Web Locks to serialize purchases between tabs. After updating the extension,
-reload it from the extensions page so the shop's purchase handler is available.
+Open **FEED** and drag food from the bag onto your owl. You can also select a
+food item and then select the owl. Each feeding uses one item from the bag.
+
+The extension stores the bag and spending in local Chrome storage. It copies any
+previously synced purchases on first use. Focus totals still use the timer’s
+sync storage. The web preview uses local storage and Web Locks to serialize bag
+changes between tabs. Reload the extension after updating.

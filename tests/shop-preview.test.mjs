@@ -30,6 +30,15 @@ test('preview purchases serialize across tabs, persist, and preserve inventory o
     await requestShop('buy', 'apple');
     assert.equal((await requestShop()).gold, 0);
     assert.equal((await requestShop()).inventory.apple, 1);
+    const bought = data.get(SHOP_KEY);
+    fail = true;
+    await assert.rejects(requestShop('feed', 'apple'), /Storage full/);
+    assert.equal(data.get(SHOP_KEY), bought);
+    fail = false;
+    const feedAttempts = await Promise.allSettled([requestShop('feed', 'apple'), requestShop('feed', 'apple')]);
+    assert.equal(feedAttempts.filter(result => result.status === 'fulfilled').length, 1);
+    assert.equal((await requestShop()).inventory.apple, 0);
+    assert.equal((await requestShop()).gold, 0);
     delete navigator.locks;
     await assert.rejects(requestShop('buy', 'apple'), /Web Locks/);
   } finally {
