@@ -17,16 +17,16 @@ function text(tag, className, value) {
   return element;
 }
 function render() {
-  document.getElementById('shop-level').textContent = `Lv. ${state.level}`;
-  document.getElementById('shop-gold').textContent = state.gold;
+  document.getElementById('shop-level').textContent = `Lv. ${state?.level ?? '—'}`;
+  document.getElementById('shop-gold').textContent = state?.gold ?? '—';
   const cards = ITEMS.filter(item => filter === 'all' || item.category === filter).map(item => {
-    const locked = state.level < item.level;
-    const count = state.inventory[item.id];
+    const locked = state && state.level < item.level;
+    const count = state?.inventory[item.id] ?? 0;
     const owned = item.category !== 'food' && count > 0;
-    const affordable = state.gold >= item.price;
+    const affordable = state && state.gold >= item.price;
     const card = document.createElement('li');
     card.className = 'item-card';
-    card.dataset.locked = locked;
+    card.dataset.locked = String(Boolean(locked));
     const details = document.createElement('div');
     const heading = text('div', 'item-heading', '');
     heading.append(text('h2', '', item.name), text('span', 'item-level', locked ? `LOCKED · Lv. ${item.level}` : `Lv. ${item.level}`));
@@ -35,9 +35,9 @@ function render() {
     const buy = text('button', 'item-buy', '');
     buy.type = 'button';
     buy.dataset.item = item.id;
-    const label = owned ? 'OWNED' : locked ? `LEVEL ${item.level} NEEDED` : !affordable ? 'NEED GOLD' : 'BUY';
+    const label = !state ? 'UNAVAILABLE' : owned ? 'OWNED' : locked ? `LEVEL ${item.level} NEEDED` : !affordable ? 'NEED GOLD' : 'BUY';
     buy.append(text('span', '', label), text('span', '', `${item.price} G`));
-    buy.disabled = buying || owned || locked || !affordable;
+    buy.disabled = !state || buying || owned || locked || !affordable;
     buy.setAttribute('aria-label', `${item.name}, ${item.price} gold. ${label}.`);
     details.append(buy);
     card.append(illustration(item), details);
@@ -53,12 +53,13 @@ async function refresh() {
     state = next;
     render();
     status.textContent = 'Find a little something. Scroll to browse.';
-  } catch {
+  } catch (error) {
     if (version !== refreshVersion || buying) return;
     // Stop purchases against a stale balance if storage is unavailable.
     state = null;
-    list.querySelectorAll('button').forEach(button => button.disabled = true);
-    status.textContent = 'Could not load the shop. Reopen this screen to retry.';
+    render();
+    status.textContent = 'Purchases unavailable. Reload the extension or reopen the Shop to retry.';
+    console.warn('Could not load Shop balance:', error);
   }
 }
 list.addEventListener('click', async event => {
@@ -78,21 +79,17 @@ list.addEventListener('click', async event => {
     try { state = await requestShop(); } catch { state = null; }
   } finally {
     buying = false;
-    if (state) {
-      render();
-      // Preserve keyboard position after rebuilding the purchased row.
-      const next = list.querySelector(`button[data-item="${id}"]`);
-      if (next && !next.disabled) next.focus({ preventScroll: true });
-      else list.closest('.shop-shelf').focus({ preventScroll: true });
-    } else {
-      list.replaceChildren();
-    }
+    render();
+    // Preserve keyboard position after rebuilding the purchased row.
+    const next = list.querySelector(`button[data-item="${id}"]`);
+    if (next && !next.disabled) next.focus({ preventScroll: true });
+    else list.closest('.shop-shelf').focus({ preventScroll: true });
   }
 });
 document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => {
   filter = button.dataset.filter;
   document.querySelectorAll('[data-filter]').forEach(tab => tab.setAttribute('aria-pressed', String(tab === button)));
-  if (state) render();
+  render();
   document.querySelector('.shop-shelf').scrollTop = 0;
 }));
 const relevant = [KEY, SHOP_KEY, PET_BONUS_XP_KEY, PET_XP_BASELINE_KEY];
@@ -106,4 +103,5 @@ if (globalThis.chrome?.runtime?.id) {
   });
 }
 window.addEventListener('focus', () => { if (!buying) refresh(); });
+render();
 refresh();
