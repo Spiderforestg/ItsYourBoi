@@ -6,20 +6,21 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
         margin: 10px;
+        text-align: center;
 
         .todo-header {
             font-weight: bold;
         }
 
-        .todo-name {
+        .todo-completed {
             grid-column: 1 / 2;
         }
 
-        .todo-difficulty {
+        .todo-name {
             grid-column: 2 / 3;
         }
 
-        .todo-completed {
+        .todo-difficulty {
             grid-column: 3 / 4;
         }
     }

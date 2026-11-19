@@ -119,9 +119,9 @@ function displayTodoList() {
 
     todoTableElement.innerHTML = `
     <tr class="todo-row">
+      <td class="todo-header" class="todo-completed">Completed</td>
       <td class="todo-header" class="todo-name">Name</td>
       <td class="todo-header" class="todo-difficulty">Difficulty</td>
-      <td class="todo-header" class="todo-completed">Completed</td>
     </tr>
     `
     // Loop through the To-do list array and add it to the HTML
@@ -135,19 +135,23 @@ function displayTodoList() {
         }
         
         let htmlString = `
+            <td class="todo-completed">
+            `
+        if (item.completed) {
+            htmlString += `Yes</td>`;
+        }
+        else htmlString += `No</td>`;
+
+        htmlString +=`
             <td class="todo-name">
                 ${item.name}
             </td>
             <td class="todo-difficulty">
                 ${item.difficulty}
             </td>
-            <td class="todo-completed">
         `;
 
-        if (item.completed) {
-            htmlString += `Yes</td>`;
-        }
-        else htmlString += `No</td>`;
+        debugLogConsole(htmlString);
         
         todoItemElement.innerHTML = htmlString;
 
