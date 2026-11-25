@@ -85,8 +85,8 @@ function addItem(event) {
         const radioValue = document.querySelector('input[name="difficulty"]:checked')?.value || null;
         
         // DEBUG: Log form responses
-        console.log(nameValue);
-        console.log(radioValue);
+        // console.log(nameValue);
+        // console.log(radioValue);
 
         if (!nameValue || !radioValue) {
             throw new Error("Required inputs missing");
@@ -99,7 +99,7 @@ function addItem(event) {
         const newTodoItem = new todoItem(id, nameValue, radioValue);
         todoArray.push(newTodoItem);
 
-        console.log(todoArray);
+        // console.log(todoArray);
 
         saveArrayToLocalStorage('todoList', todoArray);
 
@@ -180,6 +180,9 @@ function displayTodoList() {
 
         const deleteButtonElement = document.createElement('button');
         deleteButtonElement.textContent = 'Del';
+        deleteButtonElement.className = 'todo-delete-button';
+        deleteButtonElement.id = item.id;
+        initializeDeleteButton(deleteButtonElement);
 
         completedDeleteCell.append(deleteButtonElement);
 
@@ -278,10 +281,25 @@ function awardXp(difficulty) {
             break;
     };
     // console.log(`Awarding ${xpReward} XP...`);
+
+    // Set total XP to localStorage
     localStorage.setItem(PET_BONUS_XP_KEY, CURRENT_XP + xpReward);
 
     // console.log(localStorage.getItem(PET_BONUS_XP_KEY));
 }
+
+function initializeDeleteButton(button) {
+    button.addEventListener('click', deleteItem);
+}
+function deleteItem(event) {
+    const button = event.target;
+    const index = todoArray.findIndex(item => item.id == button.id);
+    todoArray.splice(index,1);
+    saveArrayToLocalStorage("todoList", todoArray);
+
+    displayTodoList();
+}
+
 
 
 // DEBUG TESTS
