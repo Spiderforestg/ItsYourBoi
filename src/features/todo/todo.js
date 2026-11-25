@@ -5,24 +5,33 @@ import { todoItem } from './todo-item-class.js';
 import { saveArrayToLocalStorage, loadArrayFromLocalStorage } from '../../utils/syncStorage.js';
 
 // Import error handler util
-import { logError } from '../../utils/errors.js';
+import { logConsoleError } from '../../utils/errors.js';
 
-// Import Sanitizer for User Input
-import { sanitizeUserInput } from '../../utils/userInput.js';
+// Import random ID generator
+import { createTodoId } from '../../utils/hash.js';
 
 // Create an array to hold the To-do items
 const todoArray = [];
 
 try {
-    loadArrayFromLocalStorage("todoList").forEach(element => {
-        const id = `todo-${todoArray.indexOf(element)}`;
-        // Push only objects of class "todoItem" into the array
-        const newTodoItem = new todoItem(id, element.name, element.difficulty);
-        todoArray.push(newTodoItem);
-    });
+    const holdArray = loadArrayFromLocalStorage("todoList");
+
+    console.log(`loading from LocalStorage:`);
+    console.log(holdArray);
+
+    if (holdArray && holdArray.length > 0) {
+        holdArray.forEach(element => {
+
+            console.log(`Element ${holdArray.indexOf(element)} in temp array`);
+            console.log(element);
+            // Push only objects of class "todoItem" into the array
+            const newTodoItem = new todoItem(element.id, element.name, element.difficulty);
+            todoArray.push(newTodoItem);
+        });
+    }
 }
 catch (err) {
-    console.log(err);
+    logConsoleError(err);
     console.log("Todo List is empty");
 }
 
@@ -60,13 +69,15 @@ displayTodoList();
 function addItem(event) {
     // Get values from form
     try {
-        const id = `todo-${todoArray.length}`;
+        const id = createTodoId();
+
+        console.log(`addItem id: ${id}`);
         const nameValue = document.getElementById('name').value;
         const radioValue = document.querySelector('input[name="difficulty"]:checked')?.value || null;
         
         // DEBUG: Log form responses
-        debugLogConsole(nameValue);
-        debugLogConsole(radioValue);
+        console.log(nameValue);
+        console.log(radioValue);
 
         if (!nameValue || !radioValue) {
             throw new Error("Required inputs missing");
@@ -79,11 +90,11 @@ function addItem(event) {
         const newTodoItem = new todoItem(id, nameValue, radioValue);
         todoArray.push(newTodoItem);
 
-        debugLogConsole(todoArray);
+        console.log(todoArray);
 
         saveArrayToLocalStorage('todoList', todoArray);
 
-        debugLogConsole(loadArrayFromLocalStorage('todoList'));
+        console.log(loadArrayFromLocalStorage('todoList'));
 
         // Clear the input field and reset radio value
         document.getElementById('name').value = '';
@@ -97,7 +108,7 @@ function addItem(event) {
         displayTodoList();
     }
     catch (err) {
-        logError(err);
+        logConsoleError(err);
 
         displayErrorMessage('form-error', "Required inputs missing");
     }
@@ -130,7 +141,7 @@ function displayTodoList() {
       <td class="todo-header" "todo-difficulty">Difficulty</td>
     </tr>
     `
-    // Loop through the To-do list array and add it to the HTML
+    // Loop through the To-do list array and add it to the HTML (AI-assisted)
     todoArray.forEach((item, index) => {
         const row = document.createElement('tr');
         row.className = 'todo-row';
@@ -141,7 +152,7 @@ function displayTodoList() {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'todo-item-checkbox';
-        checkbox.id = `todo-${index}`;
+        checkbox.id = item.id;
         checkbox.checked = Boolean(item.completed);
 
         initializeCheckbox(checkbox);
@@ -213,7 +224,7 @@ function clearButtonsBackground() {
  * Adds event listener to the checkbox to update completion status of todo item
  */
 function initializeCheckbox(checkbox, checked=false) {
-    debugLogConsole(checkbox);
+    console.log(checkbox);
 
     checkbox.addEventListener('change', handleCheckboxChange);
 }
@@ -221,7 +232,19 @@ function handleCheckboxChange(event) {
     const checkbox = event.target;
     const isChecked = checkbox.checked;
 
+    console.log(`Checkbox id: '${checkbox.id}'`);
 
+    if (isChecked) {
+        const index = todoArray.findIndex(item => item.id == checkbox.id);
+        console.log(index);
+        todoArray[index].changeCompletionStatus();
+
+        todoArray.splice(index,1);
+        console.log(todoArray);
+        
+        saveArrayToLocalStorage("todoList", todoArray);
+    }
+    displayTodoList();
 }
 
 
@@ -240,11 +263,7 @@ listArray.push(item3);*/
 /**
  * Check console to view array details
  */
-//debugLogConsole(listArray);
-
-function debugLogConsole(message) {
-    console.log(message);
-}
+//console.log(listArray);
 
 function debugCompletedItem() {
     todoArray[0].changeCompletionStatus();
