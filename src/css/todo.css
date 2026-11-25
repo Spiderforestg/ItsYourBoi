@@ -4,9 +4,10 @@
 
     .todo-row {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         margin: 10px;
         text-align: center;
+        align-items: baseline;
 
         .todo-header {
             font-weight: bold;
@@ -22,6 +23,13 @@
 
         .todo-difficulty {
             grid-column: 3 / 4;
+        }
+
+        .todo-delete {
+            grid-column: 4 / 5;
+            button {
+                background-color: initial;
+            }
         }
     }
     .completed-row {

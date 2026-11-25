@@ -10,8 +10,14 @@ import { logConsoleError } from '../../utils/errors.js';
 // Import random ID generator
 import { createTodoId } from '../../utils/hash.js';
 
+// Import XP key to save to and load from localStorage
+import { PET_BONUS_XP_KEY } from '../pet-home/pet-progress.mjs';
+
 // Create an array to hold the To-do items
 const todoArray = [];
+
+// Declare variables for EXP
+const XP_TODO_VALUES = [5, 10, 15];
 
 try {
     const holdArray = loadArrayFromLocalStorage("todoList");
@@ -21,9 +27,6 @@ try {
 
     if (holdArray && holdArray.length > 0) {
         holdArray.forEach(element => {
-
-            console.log(`Element ${holdArray.indexOf(element)} in temp array`);
-            console.log(element);
             // Push only objects of class "todoItem" into the array
             const newTodoItem = new todoItem(element.id, element.name, element.difficulty);
             todoArray.push(newTodoItem);
@@ -49,9 +52,15 @@ document.getElementById('name')
         })
 
 // Add EventListeners to Radio buttons and hide radio elements
-initializeRadioButton('easy-button','easy');
-initializeRadioButton('medium-button','medium');
-initializeRadioButton('hard-button','hard');
+const RADIO_BUTTON_VALUES_ARRAY = [
+    ['easy-button', 'easy'],
+    ['medium-button', 'medium'],
+    ['hard-button', 'hard']
+];
+console.log((RADIO_BUTTON_VALUES_ARRAY));
+RADIO_BUTTON_VALUES_ARRAY.forEach(element => {
+    initializeRadioButton(element[0], element[1]);
+});
 
 // Add Event Listener to clear To-do list
 document.getElementById('clear-list-button')
@@ -146,18 +155,17 @@ function displayTodoList() {
         const row = document.createElement('tr');
         row.className = 'todo-row';
 
-        const completedCell = document.createElement('td');
-        completedCell.className = 'todo-completed';
+        const completedCheckboxCell = document.createElement('td');
+        completedCheckboxCell.className = 'todo-completed';
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.className = 'todo-item-checkbox';
         checkbox.id = item.id;
         checkbox.checked = Boolean(item.completed);
-
         initializeCheckbox(checkbox);
 
-        completedCell.appendChild(checkbox);
+        completedCheckboxCell.appendChild(checkbox);
 
         const nameCell = document.createElement('td');
         nameCell.className = 'todo-name';
@@ -167,7 +175,15 @@ function displayTodoList() {
         difficultyCell.className = 'todo-difficulty';
         difficultyCell.textContent = item.difficulty; // Safely rendered as text
 
-        row.append(completedCell, nameCell, difficultyCell);
+        const completedDeleteCell = document.createElement('td');
+        completedDeleteCell.className = 'todo-delete';
+
+        const deleteButtonElement = document.createElement('button');
+        deleteButtonElement.textContent = 'Del';
+
+        completedDeleteCell.append(deleteButtonElement);
+
+        row.append(completedCheckboxCell, nameCell, difficultyCell, completedDeleteCell);
 
         if (item.completed) {
             row.classList.add('completed-row');
@@ -224,8 +240,6 @@ function clearButtonsBackground() {
  * Adds event listener to the checkbox to update completion status of todo item
  */
 function initializeCheckbox(checkbox, checked=false) {
-    console.log(checkbox);
-
     checkbox.addEventListener('change', handleCheckboxChange);
 }
 function handleCheckboxChange(event) {
@@ -236,15 +250,37 @@ function handleCheckboxChange(event) {
 
     if (isChecked) {
         const index = todoArray.findIndex(item => item.id == checkbox.id);
-        console.log(index);
         todoArray[index].changeCompletionStatus();
+        awardXp(todoArray[index].difficulty);
 
         todoArray.splice(index,1);
-        console.log(todoArray);
         
         saveArrayToLocalStorage("todoList", todoArray);
     }
     displayTodoList();
+}
+
+function awardXp(difficulty) {
+    const CURRENT_XP = JSON.parse(localStorage.getItem(PET_BONUS_XP_KEY));
+    let xpReward = 0;
+    switch (difficulty) {
+        case 'Easy':
+            xpReward = XP_TODO_VALUES[0];
+            break;
+        case 'Medium':
+            xpReward = XP_TODO_VALUES[1];
+            break;
+        case 'Hard':
+            xpReward = XP_TODO_VALUES[2];
+            break;
+        default:
+            xpReward = 0;
+            break;
+    };
+    // console.log(`Awarding ${xpReward} XP...`);
+    localStorage.setItem(PET_BONUS_XP_KEY, CURRENT_XP + xpReward);
+
+    // console.log(localStorage.getItem(PET_BONUS_XP_KEY));
 }
 
 
@@ -265,6 +301,6 @@ listArray.push(item3);*/
  */
 //console.log(listArray);
 
-function debugCompletedItem() {
-    todoArray[0].changeCompletionStatus();
-}
+// function debugCompletedItem() {
+//     todoArray[0].changeCompletionStatus();
+// }
